@@ -35,5 +35,11 @@ def sendInfoToInterSCity(infos):
 def alertCheck(infos):
     return infos
 
+def getDataByUUID(uuid):
+    url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
+    r = requests.get(url)
+    print(r.text)
+
 
 sendInfoToInterSCity("opa")
+getDataByUUID("9c0772b8-c809-4865-bec7-70dd2013bc37")
