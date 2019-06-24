@@ -15,7 +15,7 @@ def disconnect():
 #SocketIOTestClient.connect('http://localhost:5000')
 #SocketIOTestClient.emit("teste", "EV_276")
 
-sio.connect('http://localhost:5000')
+sio.connect('http://localhost:7877')
 sio.emit("teste", "EV_276")
 sio.wait()
 

@@ -1,4 +1,4 @@
-from processors import decoder
+from processors import decoder, jsonBuilder
 from flask import Flask, render_template
 from flask_socketio import SocketIO, disconnect
 
@@ -15,7 +15,10 @@ def test_connect():
 def handle_message(teste):
     print('received message: ' + teste)
     print("Sending Event code to processor")
-    decoder.processData_decode(teste)
+    x, y = decoder.processData_decode(teste)
+    print (x)
+    print (y)
+    jsonBuilder.sendInfoToInterSCity(x)
     disconnect()
     
 
@@ -26,5 +29,5 @@ def test_disconnect():
 
 
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app,port=7877)
 
