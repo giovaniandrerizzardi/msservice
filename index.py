@@ -15,10 +15,9 @@ def test_connect():
 def handle_message(teste):
     print('received message: ' + teste)
     print("Sending Event code to processor")
-    x, y = decoder.processData_decode(teste)
-    print (x)
-    print (y)
-    jsonBuilder.sendInfoToInterSCity(x)
+    dados = decoder.processData_decode(teste)
+   
+    jsonBuilder.sendInfoToInterSCity(dados)
     disconnect()
     
 

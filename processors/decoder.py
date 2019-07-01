@@ -75,6 +75,34 @@ class objSamples_():
     Fs = 0
     size = 0
 
+
+class finalObj():
+    netVersion = 0
+    Event_count_texas = 0
+    Event_count_texas_tot = 0
+    Event = 0
+    phaseOffset = 0
+    diffOffset = 0
+    voltageOffset = 0
+    leakageOffset = 0
+    phaseGain = 0
+    diffGain = 0
+    voltageGain = 0
+    leakageGain = 0
+    tempo_total = 0.0
+    energy_aparente = 0.0
+    energy_ativa = 0.0
+    energy_reativa = 0.0
+    erro_VAr = 0
+    phase = []
+    diff = []
+    voltage = []
+    leakage = []
+    n_channels = 0
+    Fs = 0
+    size = 0
+
+
 eventEnum = ["NADA", "EVENT_UP", "EVENT_DOWN", "EVENT_5MIN", "MANDA_CAPTURA"]
 
 
@@ -145,58 +173,59 @@ def processData_decode(msg, mostra=1):
         
     header = msg[0:HEADER_SIZE]  # total 40 bytes
     data = msg[HEADER_SIZE::]  # total 15360 bytes
+    
+    dados = finalObj()
+    #objHeader = objHeader_()
 
-    objHeader = objHeader_()
+    dados.netVersion = header[0]
 
-    objHeader.netVersion = header[0]
+    dados.Event_count_texas = int(header[1]<<8 | header[2])
+    dados.Event = eventEnum[header[3]]  # pega nome da string referente
 
-    objHeader.Event_count_texas = int(header[1]<<8 | header[2])
-    objHeader.Event = eventEnum[header[3]]  # pega nome da string referente
-
-    objHeader.Event_count_texas_tot = int(header[4]<<8 | header[5])
+    dados.Event_count_texas_tot = int(header[4]<<8 | header[5])
     # erro se dará por Event_count_texas_tot - Event_count_texas !!!!!!!!
 
-    objHeader.tempo_total = hex2float(int(header[6]<<24 | header[7]<<16 | header[8]<<8 | header[9]))
-    objHeader.energy_aparente = hex2float(int(header[10]<<24 | header[11]<<16 | header[12]<<8 | header[13]))
-    objHeader.energy_ativa = hex2float(int(header[14]<<24 | header[15]<<16 | header[16]<<8 | header[17]))
-    objHeader.energy_reativa = hex2float(int(header[18]<<24 | header[19]<<16 | header[20]<<8 | header[21]))
+    dados.tempo_total = hex2float(int(header[6]<<24 | header[7]<<16 | header[8]<<8 | header[9]))
+    dados.energy_aparente = hex2float(int(header[10]<<24 | header[11]<<16 | header[12]<<8 | header[13]))
+    dados.energy_ativa = hex2float(int(header[14]<<24 | header[15]<<16 | header[16]<<8 | header[17]))
+    dados.energy_reativa = hex2float(int(header[18]<<24 | header[19]<<16 | header[20]<<8 | header[21]))
 
-    objHeader.erro_VAr = int( ((header[25])<<24) + ((header[24])<<16) + ((header[23])<<8) + (header[22]))  # int
+    dados.erro_VAr = int( ((header[25])<<24) + ((header[24])<<16) + ((header[23])<<8) + (header[22]))  # int
 
     # está no firmware do TEXAS TM4C como constantes e aqui tambem
-    objHeader.phaseOffset = IFASE_OFFSET
-    objHeader.diffOffset = IDIFF_OFFSET
-    objHeader.voltageOffset = TENSAO_OFFSET
-    objHeader.leakageOffset = IGND_OFFSET
+    dados.phaseOffset = IFASE_OFFSET
+    dados.diffOffset = IDIFF_OFFSET
+    dados.voltageOffset = TENSAO_OFFSET
+    dados.leakageOffset = IGND_OFFSET
 
-    objHeader.phaseGain = IFASE_GANHO
-    objHeader.diffGain = IDIFF_GANHO
-    objHeader.voltageGain = TENSAO_GANHO
-    objHeader.leakageGain = IGND_GANHO
+    dados.phaseGain = IFASE_GANHO
+    dados.diffGain = IDIFF_GANHO
+    dados.voltageGain = TENSAO_GANHO
+    dados.leakageGain = IGND_GANHO
 
     if mostra:
-        print("netVersion", objHeader.netVersion)
-        print("Event_count_texas", objHeader.Event_count_texas)
-        print("Event", objHeader.Event)
-        print("Event_count_texas_tot", objHeader.Event_count_texas_tot)
-        print("phaseGain, phaseOffset", objHeader.phaseGain, objHeader.phaseOffset)
-        print("diffGain, diffOffset", objHeader.diffGain, objHeader.diffOffset)
-        print("voltageGain, voltageOffset", objHeader.voltageGain, objHeader.voltageOffset)
-        print("leakageGain, leakageOffset", objHeader.leakageGain, objHeader.leakageOffset)
-        print("tempo_total", objHeader.tempo_total, "segundos")
-        print("energy_aparente", objHeader.energy_aparente, "kVAh")
-        print("energy_ativa", objHeader.energy_ativa, "kWh")
-        print("energy_reativa", objHeader.energy_reativa, "kVArh")
+        print("netVersion", dados.netVersion)
+        print("Event_count_texas", dados.Event_count_texas)
+        print("Event", dados.Event)
+        print("Event_count_texas_tot", dados.Event_count_texas_tot)
+        print("phaseGain, phaseOffset", dados.phaseGain, dados.phaseOffset)
+        print("diffGain, diffOffset", dados.diffGain, dados.diffOffset)
+        print("voltageGain, voltageOffset", dados.voltageGain, dados.voltageOffset)
+        print("leakageGain, leakageOffset", dados.leakageGain, dados.leakageOffset)
+        print("tempo_total", dados.tempo_total, "segundos")
+        print("energy_aparente", dados.energy_aparente, "kVAh")
+        print("energy_ativa", dados.energy_ativa, "kWh")
+        print("energy_reativa", dados.energy_reativa, "kVArh")
 
-    objSamples = objSamples_()
+    #objSamples = objSamples_()
 
-    objSamples.phase, objSamples.diff, objSamples.voltage, objSamples.leakage = decode_data(data)
+    dados.phase, dados.diff, dados.voltage, dados.leakage = decode_data(data)
 
-    objSamples.n_channels = 4
-    objSamples.Fs = N_AMOSTRAS*60.0
-    objSamples.size = N_TOTAL_AMOSTRAS  # N_AMOSTRAS*N_CICLOS  # len(objSamples.voltage)
+    dados.n_channels = 4
+    dados.Fs = N_AMOSTRAS*60.0
+    dados.size = N_TOTAL_AMOSTRAS  # N_AMOSTRAS*N_CICLOS  # len(objSamples.voltage)
 
-    return objHeader, objSamples
+    return dados
 
 
 """
