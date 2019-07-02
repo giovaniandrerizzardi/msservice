@@ -15,7 +15,6 @@ def sendInfoToInterSCity(dados):
     
     dados.timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     data = serialize(dados)
-    #print(data)
 
    # json_data = json.dumps(data2)
    # json_data = json.dumps(data)
@@ -23,6 +22,7 @@ def sendInfoToInterSCity(dados):
     infoConsumo = {  
         "data":{"infoConsumo": [data]}
     }
+   # print(infoConsumo)
     #print(json.dumps(infoConsumo))
     r = requests.post('http://127.0.0.1:8000/adaptor/resources/9c0772b8-c809-4865-bec7-70dd2013bc37/data',json=infoConsumo)
     print(r.status_code, r.reason)

@@ -101,9 +101,14 @@ class finalObj():
     n_channels = 0
     Fs = 0
     size = 0
+    rmsPhase_real = 0
+    rmsDiff_real = 0
+    rmsVoltage_real = 0
+    rmsLeakage_real = 0
 
 
 eventEnum = ["NADA", "EVENT_UP", "EVENT_DOWN", "EVENT_5MIN", "MANDA_CAPTURA"]
+
 
 
 # Convert from Hex to Float - IEEE754 Format
@@ -131,6 +136,16 @@ def hex2float(n):
 
     return sign * mantissa * math.pow(2, exp - 23)
 
+
+def vetor_total_ajustado_np(ganho, sinal):
+    sinal = np.array(sinal, dtype=np.float32)  # tudo vira float32
+    offset = np.mean(sinal, dtype=np.float32)  # teste de offset "automático" ja que o toroide é "puramente" AC
+    sinal = (sinal-offset)*(3.3/4096)*ganho  # primeiro desconta o offset
+    return sinal
+
+
+def rms_np(sinal):
+    return np.sqrt(np.mean(np.square(np.abs(sinal))))
 
 def decode_data(data):
     data_samples_uint16_unzip = []
@@ -203,6 +218,18 @@ def processData_decode(msg, mostra=1):
     dados.voltageGain = TENSAO_GANHO
     dados.leakageGain = IGND_GANHO
 
+    dados.phase, dados.diff, dados.voltage, dados.leakage = decode_data(data)
+
+    phase_real = vetor_total_ajustado_np(dados.phaseGain, dados.phase)
+    diff_real = vetor_total_ajustado_np(dados.diffGain, dados.diff)
+    voltage_real = vetor_total_ajustado_np(dados.voltageGain, dados.voltage)
+    leakage_real = vetor_total_ajustado_np(dados.leakageGain, dados.leakage)
+    ciclo = 8  # ciclo escolhido + 512 = 2 ciclos calculados, modificar conforme for....
+    dados.rmsPhase_real = (rms_np(phase_real[ciclo*256:(ciclo*256+512)])).item()
+    dados.rmsDiff_real = (rms_np(diff_real[ciclo*256:(ciclo*256+512)])*1000).item()
+    dados.rmsVoltage_real = (rms_np(voltage_real[ciclo*256:(ciclo*256+512)])).item()
+    dados.rmsLeakage_real = (rms_np(leakage_real[ciclo*256:(ciclo*256+512)])*1000).item()
+    
     if mostra:
         print("netVersion", dados.netVersion)
         print("Event_count_texas", dados.Event_count_texas)
@@ -216,10 +243,10 @@ def processData_decode(msg, mostra=1):
         print("energy_aparente", dados.energy_aparente, "kVAh")
         print("energy_ativa", dados.energy_ativa, "kWh")
         print("energy_reativa", dados.energy_reativa, "kVArh")
-
-    #objSamples = objSamples_()
-
-    dados.phase, dados.diff, dados.voltage, dados.leakage = decode_data(data)
+        print("Valor RMS phase_real:", dados.rmsPhase_real, "A")
+        print("Valor RMS diff_real:", dados.rmsDiff_real, "mA")
+        print("Valor RMS voltage_real:", dados.rmsVoltage_real, "V")
+        print("Valor RMS leakage_real:", dados.rmsLeakage_real, "mA")
 
     dados.n_channels = 4
     dados.Fs = N_AMOSTRAS*60.0
@@ -252,15 +279,6 @@ plt.show()
 
 # caso queira verificar valores RMS das amostras e calcular potência..., deve ter modulo numpy instalado
 
-def vetor_total_ajustado_np(ganho, sinal):
-    sinal = np.array(sinal, dtype=np.float32)  # tudo vira float32
-    offset = np.mean(sinal, dtype=np.float32)  # teste de offset "automático" ja que o toroide é "puramente" AC
-    sinal = (sinal-offset)*(3.3/4096)*ganho  # primeiro desconta o offset
-    return sinal
-
-
-def rms_np(sinal):
-    return np.sqrt(np.mean(np.square(np.abs(sinal))))
 
 def buildGraphics(x,y):
     phase_real = vetor_total_ajustado_np(x.phaseGain, y.phase)
