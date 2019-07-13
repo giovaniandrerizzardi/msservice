@@ -16,9 +16,6 @@ def sendInfoToInterSCity(dados):
     dados.timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     data = serialize(dados)
 
-   # json_data = json.dumps(data2)
-   # json_data = json.dumps(data)
-   # infoConsumo = {"infoConsumo": [data]}
     infoConsumo = {  
         "data":{"infoConsumo": [data]}
     }
@@ -61,4 +58,3 @@ def getDataMonthly(uuid):
     print(r.text)
     return r.text
 
-getDataMonthly("aaa")

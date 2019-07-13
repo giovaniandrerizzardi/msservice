@@ -12,9 +12,6 @@ def dailyProcessing():
     data = interscityManager.getDataDaily(uuid)
     print (data)
 
-
-
-
 schedule.every(1).minutes.do(job)
 schedule.every().day.do(job)
 

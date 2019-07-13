@@ -8,7 +8,6 @@ mydb = mysql.connector.connect(
     database='mestrado',
 )
 
-
 mycursor = mydb.cursor() 
 
 #cria database
@@ -16,7 +15,7 @@ mycursor = mydb.cursor()
 mycursor.execute("SHOW DATABASES")
 for x in mycursor:
   print(x)
-
+mycursor.execute("use mestrado")
 #cria tabela
 mycursor.execute(
     "CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))")
