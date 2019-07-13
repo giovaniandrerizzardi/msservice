@@ -1,9 +1,9 @@
-from processors import decoder, jsonBuilder
+from processors import decoder, interscityManager
 import json
  
 dados = decoder.processData_decode("EV_263")
 
-jsonBuilder.sendInfoToInterSCity(dados)
+interscityManager.sendInfoToInterSCity(dados)
 
 #a = json.dumps(x)
 #print(y)

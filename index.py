@@ -1,4 +1,4 @@
-from processors import decoder, jsonBuilder
+from processors import decoder, interscityManager
 from flask import Flask, render_template
 from flask_socketio import SocketIO, disconnect
 
@@ -17,7 +17,7 @@ def handle_message(teste):
     print("Sending Event code to processor")
     dados = decoder.processData_decode(teste)
    
-    jsonBuilder.sendInfoToInterSCity(dados)
+    interscityManager.sendInfoToInterSCity(dados)
     disconnect()
     
 
