@@ -1,6 +1,7 @@
 import requests
 import json
 from datetime import date, datetime, timedelta
+from collections import namedtuple
 
 def serialize(obj):
     if isinstance(obj, date):
@@ -35,14 +36,18 @@ def getDataByUUID(uuid):
 
 
 def getDataDaily(uuid):
+    uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
     url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
     now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%d/%m/%Y %H:%M:%S")
     print (now)
     print (yesterday)
-    r = requests.get(url, json={'capabilities': [
-                     'weather'], 'start_date': yesterday, 'end_date': now})
-    print(r.text)
+    r = requests.post(url, json={'start_date': yesterday, 'end_date': now})
+    #data = json.loads(r.text)
+    data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    print(data.resources.rmsVoltage_real)
+
+    #print(r.text)
     return r.text
 
 
