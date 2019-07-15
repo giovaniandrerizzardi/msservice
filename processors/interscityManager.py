@@ -16,7 +16,7 @@ def sendInfoToInterSCity(dados):
     
     dados.timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     data = serialize(dados)
-
+    print("aaaaaaaaaaaaaaaaaaaaa")
     infoConsumo = {  
         "data":{"infoConsumo": [data]}
     }
@@ -40,26 +40,35 @@ def getDataDaily(uuid):
     url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
     now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%d/%m/%Y %H:%M:%S")
-    print (now)
-    print (yesterday)
+    print ("Get Daily Energy information with range ", yesterday, " until ", now)
     r = requests.post(url, json={'start_date': yesterday, 'end_date': now})
-    #data = json.loads(r.text)
+   
     data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-    print(data.resources.rmsVoltage_real)
+    infoConsumoList = data.resources[0].capabilities.infoConsumo
+    totalDailyEnergy = 0
+   
+    for s in infoConsumoList:
+        totalDailyEnergy += s.energy_ativa
+  
+    print ("Daily total energy: ", totalDailyEnergy, "kWh")
 
     #print(r.text)
-    return r.text
+    return totalDailyEnergy
 
 
-def getDataMonthly(uuid):
+def getDataByRange(uuid, startDate, endDate):
+    uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
     url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
-    now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    lastMonth = (datetime.now() - timedelta(months=1)
-                 ).strftime("%d/%m/%Y %H:%M:%S")
-    print(now)
-    print(lastMonth)
-    r = requests.get(url, json={'capabilities': [
-                     'weather'], 'start_date': lastMonth, 'end_date': now})
-    print(r.text)
-    return r.text
+    print ("Get Energy information with range ", startDate, " until ", endDate)
+    r = requests.post(url, json={'start_date': startDate, 'end_date': endDate})
+   
+    data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    infoConsumoList = data.resources[0].capabilities.infoConsumo
+    totalDailyEnergy = 0
+    for s in infoConsumoList:
+        totalDailyEnergy += s.energy_ativa
+   
+    print ("Daily total energy: ", totalDailyEnergy, "kWh")
 
+    #print(r.text)
+    return totalDailyEnergy

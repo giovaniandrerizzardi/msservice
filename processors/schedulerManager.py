@@ -1,8 +1,9 @@
 #pip install schedule
 import schedule
 import time
-import interscityManager
+import interscityManager, isoFunctionalities
 
+iso = isoFunctionalities
 
 def job():
     print("I'm working...")
@@ -13,6 +14,13 @@ def dailyProcessing():
     print (data)
 
 schedule.every(1).minutes.do(job)
+schedule.every(1).minutes.do(iso.func71)
+schedule.every(1).minutes.do(iso.func72)
+schedule.every(1).minutes.do(iso.func73)
+schedule.every(1).minutes.do(iso.func75)
+schedule.every(1).minutes.do(iso.func76)
+schedule.every(1).minutes.do(iso.func77)
+
 schedule.every().day.do(job)
 
 while True:
