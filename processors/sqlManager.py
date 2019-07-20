@@ -1,4 +1,5 @@
 #pip install mysql-connector
+#pip install peewee
 import mysql.connector
 #cria conexao
 mydb = mysql.connector.connect(
