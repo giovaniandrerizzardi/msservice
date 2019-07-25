@@ -2,6 +2,7 @@
 
 def func71():
     print("funcionalidade 7.1")
+    
 
 def func72():
     print("funcionalidade 7.2")
