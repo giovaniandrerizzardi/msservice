@@ -72,3 +72,14 @@ def getDataByRange(uuid, startDate, endDate):
 
     #print(r.text)
     return totalDailyEnergy
+
+
+def getDynamicData(uuid, parameterString):
+    url = 'http://127.0.0.1:8000/collector/resources/'
+    if uuid != '':
+        url +=uuid + '/data'
+    else :
+        url += '/data'
+    print (url)
+#olhar o online playgroud pra colocar o json  dinamico aqui
+getDynamicData('uuidd','')
