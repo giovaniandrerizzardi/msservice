@@ -74,12 +74,26 @@ def getDataByRange(uuid, startDate, endDate):
     return totalDailyEnergy
 
 
+def postDynamicData(uuid, parameterString):
+    url = 'http://127.0.0.1:8000/collector/resources/'
+    if uuid != '':
+        url +=uuid + '/data'
+    else :
+        url += '/data'
+
+    print (parameterString)
+    print (url)
+
+
 def getDynamicData(uuid, parameterString):
     url = 'http://127.0.0.1:8000/collector/resources/'
     if uuid != '':
         url +=uuid + '/data'
     else :
         url += '/data'
+
+    if parameterString != None :
+        url+= '/'+parameterString
     print (url)
 #olhar o online playgroud pra colocar o json  dinamico aqui
-getDynamicData('uuidd','')
+getDynamicData('uuidd','{start_date":"2019-07-14T14:56:20","end_date":"2019-07-16T14:56:20"}')

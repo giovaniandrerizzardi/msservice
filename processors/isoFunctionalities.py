@@ -1,6 +1,6 @@
 
 
-def func71():
+def func71(nr_residentes, co):
     print("funcionalidade 7.1")
     
 
