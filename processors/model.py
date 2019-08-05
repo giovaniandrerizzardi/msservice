@@ -41,6 +41,14 @@ class iso_functionalities(Model):
     class Meta:
         database = mysql_db
 
+class last_event(Model):
+    uuid = CharField()
+    nr_residentes = IntegerField()
+    corrente_nominal = DoubleField()
+    public_building = BooleanField()
+    class Meta:
+        database = mysql_db
+
 
 def createTables():
     mysql_db.connect()
@@ -49,6 +57,8 @@ def createTables():
     consumo_mes.create_table()
     iso_functionalities.create_table()
     mysql_db.close()
+
+
 
 
 def addNewCasa(casaUuid, nrResidentes, correnteNominal, publicBuilding):

@@ -178,7 +178,7 @@ def decode_data(data):
 
 
 def processData_decode(msg, mostra=1):
-    print("processData_decode, received EventCode : " + msg)
+   # print("processData_decode, received EventCode : " + msg)
     if msg == "EV_263":
         msg = EV_263
     elif msg == "EV_275":
