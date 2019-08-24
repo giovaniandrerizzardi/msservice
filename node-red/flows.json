@@ -1,1 +1,387 @@
-[{"id":"dc2d0fc7.ab66f","type":"tab","label":"Flow 1","disabled":false,"info":""},{"id":"8bd3c3e1.0506f","type":"ui_button","z":"dc2d0fc7.ab66f","name":"","group":"1a8e3c86.5d3df3","order":2,"width":0,"height":0,"passthru":false,"label":"button","tooltip":"","color":"","bgcolor":"","icon":"","payload":"Hello World","payloadType":"str","topic":"","x":219.5,"y":287,"wires":[["4089bf09.3f3d1","843b1df6.3f052"]]},{"id":"843b1df6.3f052","type":"debug","z":"dc2d0fc7.ab66f","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"false","x":397.5,"y":378,"wires":[]},{"id":"4089bf09.3f3d1","type":"ui_text","z":"dc2d0fc7.ab66f","group":"1a8e3c86.5d3df3","order":3,"width":0,"height":0,"name":"aaaa","label":"Bom dia","format":"{{msg.payload}}","layout":"row-spread","x":379.5,"y":293,"wires":[]},{"id":"e7fe5cf4.5a719","type":"ui_slider","z":"dc2d0fc7.ab66f","name":"","label":"Tensão","tooltip":"","group":"86e7ceb0.51a1","order":1,"width":0,"height":0,"passthru":true,"outs":"all","topic":"","min":0,"max":"500","step":1,"x":197.5,"y":526,"wires":[["a1c0556.73804a8","5acc1e12.ed0b"]]},{"id":"a1c0556.73804a8","type":"ui_gauge","z":"dc2d0fc7.ab66f","name":"","group":"86e7ceb0.51a1","order":4,"width":0,"height":0,"gtype":"gage","title":"Tensometro","label":"units","format":"{{value}}","min":0,"max":"500","colors":["#00b500","#e6e600","#ca3838"],"seg1":"220","seg2":"240","x":406.5,"y":521,"wires":[]},{"id":"b9fdfd80.0360c","type":"ui_chart","z":"dc2d0fc7.ab66f","name":"","group":"86e7ceb0.51a1","order":2,"width":0,"height":0,"label":"chart","chartType":"line","legend":"false","xformat":"HH:mm:ss","interpolate":"linear","nodata":"","dot":false,"ymin":"","ymax":"","removeOlder":1,"removeOlderPoints":"","removeOlderUnit":"3600","cutout":0,"useOneColor":false,"colors":["#1f77b4","#aec7e8","#ff7f0e","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5"],"useOldStyle":false,"outputs":1,"x":396.5,"y":594,"wires":[[]]},{"id":"5acc1e12.ed0b","type":"ui_template","z":"dc2d0fc7.ab66f","group":"86e7ceb0.51a1","name":"","order":4,"width":0,"height":0,"format":"<div ng-bind-html=\"msg.payload\"></div>","storeOutMessages":true,"fwdInMessages":true,"templateScope":"local","x":422.5,"y":658,"wires":[[]]},{"id":"9a5553de.5d56f","type":"http request","z":"dc2d0fc7.ab66f","name":"","method":"GET","ret":"txt","paytoqs":false,"url":"/projeto","tls":"","proxy":"","authType":"","x":78.5,"y":680,"wires":[["17909926.ee1a47"]]},{"id":"17909926.ee1a47","type":"function","z":"dc2d0fc7.ab66f","name":"","func":"for(i=0;i<100;i++){\n    msg = i;\n}\nreturn msg;","outputs":1,"noerr":0,"x":249.5,"y":607,"wires":[["b9fdfd80.0360c"]]},{"id":"1a8e3c86.5d3df3","type":"ui_group","z":"","name":"text","tab":"3a2c94bf.5d8efc","disp":true,"width":"6","collapse":false},{"id":"86e7ceb0.51a1","type":"ui_group","z":"","name":"Analog","tab":"3a2c94bf.5d8efc","disp":true,"width":"6","collapse":false},{"id":"3a2c94bf.5d8efc","type":"ui_tab","z":"","name":"Demo","icon":"dashboard","disabled":false,"hidden":false}]
+[
+    {
+        "id": "b9fdfd80.0360c",
+        "type": "ui_chart",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Corrente",
+        "group": "3f6d1fe6.35e14",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Corrente",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Corrente",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 939.4999389648438,
+        "y": 301.9999752044678,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "950bde97.211ed",
+        "type": "ui_chart",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "group": "daea733b.25795",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Consumo Total",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Consumo Total",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 959.9999771118164,
+        "y": 351.99996185302734,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6c8d36c6.4f8ac8",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "897eede5.c1ae9",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Evento",
+        "label": "Evento",
+        "format": "{{msg.payload.evento}}",
+        "layout": "row-spread",
+        "x": 940.4999923706055,
+        "y": 408.9999237060547,
+        "wires": []
+    },
+    {
+        "id": "c4bded6d.00f68",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Lastevento",
+        "func": "msg.payload.evento = msg.payload.event_type\nmsg.payload.energy_ativa = msg.payload.energy_ativa + \" kWh\"\nmsg.payload.voltage_real = msg.payload.voltage_real_rms + \" V\"\nmsg.payload.phase_real = msg.payload.phase_real_rms + \" A\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 700.5000228881836,
+        "y": 454.9999370574951,
+        "wires": [
+            [
+                "6c8d36c6.4f8ac8",
+                "356e0505.dc025a",
+                "8df02a9.92385d8",
+                "8854176c.41c818"
+            ]
+        ]
+    },
+    {
+        "id": "356e0505.dc025a",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "897eede5.c1ae9",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Consumo",
+        "label": "Consumo",
+        "format": "{{msg.payload.energy_ativa}}",
+        "layout": "row-spread",
+        "x": 938.9999923706055,
+        "y": 457.9999237060547,
+        "wires": []
+    },
+    {
+        "id": "8df02a9.92385d8",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "897eede5.c1ae9",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Tensão",
+        "label": "Tensão",
+        "format": "{{msg.payload.voltage_real}}",
+        "layout": "row-spread",
+        "x": 939.9999923706055,
+        "y": 506.9999237060547,
+        "wires": []
+    },
+    {
+        "id": "8854176c.41c818",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "897eede5.c1ae9",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Consumo",
+        "label": "Corrente",
+        "format": "{{msg.payload.phase_real}}",
+        "layout": "row-spread",
+        "x": 944.9999923706055,
+        "y": 550.9999237060547,
+        "wires": []
+    },
+    {
+        "id": "f617cae1.8cc938",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Tensao ",
+        "func": "msg.payload.voltage_real = msg.payload.voltage_real_rms\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 693.4999542236328,
+        "y": 199.99996185302734,
+        "wires": [
+            [
+                "4e753f9e.aa74f"
+            ]
+        ]
+    },
+    {
+        "id": "4e753f9e.aa74f",
+        "type": "ui_gauge",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "group": "86e7ceb0.51a1",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Tensão",
+        "label": "V",
+        "format": "{{msg.payload.voltage_real}}",
+        "min": 0,
+        "max": "500",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "220",
+        "seg2": "240",
+        "x": 934.9999389648438,
+        "y": 187.99997520446777,
+        "wires": []
+    },
+    {
+        "id": "f689312c.f4139",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Corrente",
+        "func": "msg.payload.phase_real_rms = msg.payload.phase_real_rms\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 687.9999313354492,
+        "y": 260.9999599456787,
+        "wires": [
+            [
+                "d12e2fa.bea9ed",
+                "b9fdfd80.0360c"
+            ]
+        ]
+    },
+    {
+        "id": "d12e2fa.bea9ed",
+        "type": "ui_gauge",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "group": "86e7ceb0.51a1",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Corrente",
+        "label": "A",
+        "format": "{{msg.payload.phase_real_rms}}",
+        "min": 0,
+        "max": "10",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "2",
+        "seg2": "5",
+        "x": 936.9999389648438,
+        "y": 238.99997520446777,
+        "wires": []
+    },
+    {
+        "id": "a772ba4c.73a938",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Consumo Total",
+        "func": "msg.payload = msg.payload.energy_ativa\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 707.9999771118164,
+        "y": 350.99996185302734,
+        "wires": [
+            [
+                "950bde97.211ed"
+            ]
+        ]
+    },
+    {
+        "id": "de47dd2f.5cd97",
+        "type": "http in",
+        "z": "dc2d0fc7.ab66f",
+        "name": "POST ultimo evento",
+        "url": "/attstatus",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 150.29258728027344,
+        "y": 350.9999465942383,
+        "wires": [
+            [
+                "135ff545.e0f5eb"
+            ]
+        ]
+    },
+    {
+        "id": "135ff545.e0f5eb",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "tratativador",
+        "func": "return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 355.2926445007324,
+        "y": 350.0482864379883,
+        "wires": [
+            [
+                "a78e9abf.453128",
+                "d0c4804a.5ca8b",
+                "f617cae1.8cc938",
+                "f689312c.f4139",
+                "a772ba4c.73a938",
+                "c4bded6d.00f68"
+            ]
+        ]
+    },
+    {
+        "id": "a78e9abf.453128",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 710.292610168457,
+        "y": 594.1818265914917,
+        "wires": []
+    },
+    {
+        "id": "d0c4804a.5ca8b",
+        "type": "http response",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Return 200",
+        "statusCode": "200",
+        "headers": {},
+        "x": 702.2812576293945,
+        "y": 558.6760234832764,
+        "wires": []
+    },
+    {
+        "id": "3f6d1fe6.35e14",
+        "type": "ui_group",
+        "z": "",
+        "name": "corrente",
+        "tab": "3a2c94bf.5d8efc",
+        "order": 3,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "daea733b.25795",
+        "type": "ui_group",
+        "z": "",
+        "name": "corrente2",
+        "tab": "3a2c94bf.5d8efc",
+        "order": 4,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "897eede5.c1ae9",
+        "type": "ui_group",
+        "z": "",
+        "name": "Ultimo Evento",
+        "tab": "3a2c94bf.5d8efc",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "86e7ceb0.51a1",
+        "type": "ui_group",
+        "z": "",
+        "name": "Gráficos",
+        "tab": "3a2c94bf.5d8efc",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "3a2c94bf.5d8efc",
+        "type": "ui_tab",
+        "z": "",
+        "name": "Grafico Último Evento",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
