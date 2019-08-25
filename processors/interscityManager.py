@@ -16,7 +16,7 @@ def sendInfoToInterSCity(dados):
     
     dados.timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     data = serialize(dados)
-    print("aaaaaaaaaaaaaaaaaaaaa")
+    print("enviando os dados do evento numero " + str(dados.Event_count_texas))
     infoConsumo = {  
         "data":{"infoConsumo": [data]}
     }
@@ -24,6 +24,8 @@ def sendInfoToInterSCity(dados):
     #print(json.dumps(infoConsumo))
     r = requests.post('http://127.0.0.1:8000/adaptor/resources/9c0772b8-c809-4865-bec7-70dd2013bc37/data',json=infoConsumo)
     print(r.status_code, r.reason)
+    if r.status_code != 200 :
+        return
     print (r.request.body)
 
 def alertCheck(infos):
@@ -44,6 +46,9 @@ def getDataDaily(uuid):
     r = requests.post(url, json={'start_date': yesterday, 'end_date': now})
    
     data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    if data.resources == []:
+        print ("Nenhum evento neste periodo.")
+        return
     infoConsumoList = data.resources[0].capabilities.infoConsumo
     totalDailyEnergy = 0
    
@@ -55,6 +60,7 @@ def getDataDaily(uuid):
     #print(r.text)
     return totalDailyEnergy
 
+getDataDaily('')
 
 def getDataByRange(uuid, startDate, endDate):
     uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
@@ -97,5 +103,6 @@ def getDynamicData(uuid, parameterString):
     print (url)
     r = requests.post(url, json=parameterString)
     print (r.text)
+    return r.text
 #olhar o online playgroud pra colocar o json  dinamico aqui
 #getDynamicData('9c0772b8-c809-4865-bec7-70dd2013bc37','{start_date":"2019-07-14T14:56:20","end_date":"2019-07-16T14:56:20"}')

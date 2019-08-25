@@ -1,8 +1,15 @@
-
+import interscityManager
+import json
+from collections import namedtuple
 
 def func71(nr_residentes, co):
     print("funcionalidade 7.1")
-    
+    r = interscityManager.getDynamicData('uuid','parametros')
+    data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    if data.resources == []:
+        print ("Nenhum evento neste periodo.")
+        return
+    infoConsumoList = data.resources[0].capabilities.infoConsumo
 
 def func72():
     print("funcionalidade 7.2")

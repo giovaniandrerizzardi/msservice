@@ -1,4 +1,5 @@
 import socket
+import requests
 from processors import decoder, interscityManager
 # loop que fica "escutando" a porta que será de comunicaçao com a TM4C
 
@@ -6,6 +7,7 @@ TCP_IP='192.168.1.250'
 TCP_PORT=7891
 FLAG_TCP_ON=1
 BUFFER_SIZE=15400
+DEFAULT_UUID = '9c0772b8-c809-4865-bec7-70dd2013bc37'
 
 def upaupa_servidor_tcp(n_eventos):
     global FLAG_TCP_ON, SOCKET_TCP_RX
@@ -74,12 +76,22 @@ def upaupa_servidor_tcp(n_eventos):
             """
             #conn.send(data)  # echo
         conn.close()
-        files = open("conjuntoTeste.txt","a+")
+       # files = open("conjuntoTeste.txt","a+")
         dados = decoder.processData_decode(msg)
-        files.write(str(msg))
-        files.write("FIMDOEVENTO")
-        files.close()
-       # interscityManager.sendInfoToInterSCity(dados)
+      #  files.write(str(msg))
+       # files.write("FIMDOEVENTO")
+       # files.close()
+        
+        datajson = {
+        "event_type": dados.Event,
+        "energy_ativa": dados.energy_ativa,
+        "voltage_real_rms": dados.rmsVoltage_real,
+        "phase_real_rms": dados.rmsPhase_real,
+        "total_energy_daily": interscityManager.getDataDaily(DEFAULT_UUID)
+        }
+        requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
+
+        interscityManager.sendInfoToInterSCity(dados)
         print("EVENTO:", dados)
         if cont == n_eventos:
             print("CHEGAAAAAAAAAAAAAAAAAAA")
