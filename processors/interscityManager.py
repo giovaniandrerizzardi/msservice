@@ -60,7 +60,7 @@ def getDataDaily(uuid):
     #print(r.text)
     return totalDailyEnergy
 
-getDataDaily('')
+
 
 def getDataByRange(uuid, startDate, endDate):
     uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"

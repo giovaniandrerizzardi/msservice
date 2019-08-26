@@ -10,6 +10,14 @@ def func71(nr_residentes, co):
         print ("Nenhum evento neste periodo.")
         return
     infoConsumoList = data.resources[0].capabilities.infoConsumo
+    totalEnergy = 0
+
+    for s in infoConsumoList:
+        totalEnergy += s.energy_ativa
+    energymedium = totalEnergy/nr_residentes
+    print("Energia media gasta por residentes: ", energymedium, "kWh")
+
+
 
 def func72():
     print("funcionalidade 7.2")
