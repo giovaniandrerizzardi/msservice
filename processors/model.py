@@ -15,11 +15,17 @@ class casa_info(Model):
     corrente_nominal = DoubleField()
     public_building = BooleanField()
     tensao_nominal = DoubleField()
-    ip_address = CharField()
+    localizacao = CharField()
 
     class Meta:
         database = mysql_db
 
+class city_infos(Model):
+    city = CharField()
+    nr_habitantes = IntegerField()
+
+    class Meta:
+        database = mysql_db
 
 class consumo_dia(Model):
     data = DateTimeField(default=datetime.datetime.now)
@@ -64,11 +70,13 @@ def createTables():
 def resetTables():
     mysql_db.connect()
     casa_info.drop_table()
+    city_infos.drop_table()
     consumo_dia.drop_table()
     consumo_mes.drop_table()
     iso_functionalities.drop_table()
 
     casa_info.create_table()
+    city_infos.create_table()
     consumo_dia.create_table()
     consumo_mes.create_table()
     iso_functionalities.create_table()
@@ -80,10 +88,21 @@ def addNewCasa(casaUuid, nrResidentes, correnteNominal, publicBuilding):
     casa_info.insert(uuid=casaUuid, nr_residentes=nrResidentes, corrente_nominal=correnteNominal ,public_building=publicBuilding)
     casa_info.insert(UUIDField = casaUuid)
 
-#mysql_db.connect()
-#casa_info.create(uuid = "dsdsadasddddasd", nr_residentes=1, corrente_nominal=11 ,public_building=0)
-#mysql_db.close()
+def addcasa_info(Uuid, nrResidentes, correnteNominal, publicBuilding,tensaoNominal,Nlocalizacao):
+    mysql_db.connect()
+    casa_info.create(uuid = Uuid, nr_residentes=nrResidentes, corrente_nominal=correnteNominal ,public_building=publicBuilding, tensao_nominal = tensaoNominal, localizacao = Nlocalizacao)
+    mysql_db.close()
 
+
+
+#resetTables()
+#addcasa_info('9c0772b8-c809-4865-bec7-70dd2013bc37',5,2,0,220,'lat:12345#lon:12345')
+def getMysqlInstance():
+    mysql_db.connect()
+    return mysql_db
+#query = casa_info.select()
+#for casa in query:
+#    print(casa.nr_residentes)
 
 def getById(uuid):
     mysql_db.connect()

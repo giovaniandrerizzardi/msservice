@@ -1,21 +1,28 @@
 import interscityManager
+import model
 import json
 from collections import namedtuple
 
 def func71(nr_residentes, co):
     print("funcionalidade 7.1 - O consumo total de energia el ́etrica residencial per capita")
-    r = interscityManager.getDynamicData('uuid','parametros')
-    data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-    if data.resources == []:
-        print ("Nenhum evento neste periodo.")
-        return
-    infoConsumoList = data.resources[0].capabilities.infoConsumo
-    totalEnergy = 0
+   # r = interscityManager.getDynamicData('uuid','parametros')
+    query = model.casa_info.select()
+    for casa in query:
+        energymedium = 0
+        print("consultando dados da casa " , casa.uuid)
+        r = interscityManager.getDataByUUID(casa.uuid)
+        data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+        if data.resources == []:
+            print ("Nenhum evento cadastrado nesta casa.")
+        else:
+            pass
+            infoConsumoList = data.resources[0].capabilities.infoConsumo
+            totalEnergy = 0
 
-    for s in infoConsumoList:
-        totalEnergy += s.energy_ativa
-    energymedium = totalEnergy/nr_residentes
-    print("Energia media gasta por residentes: ", energymedium, "kWh")
+            for s in infoConsumoList:
+                totalEnergy += s.energy_ativa
+            energymedium = totalEnergy/nr_residentes
+        print("Energia media gasta por residentes: ", energymedium, "kWh")
 
 
 
