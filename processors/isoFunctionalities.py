@@ -35,8 +35,17 @@ def func71(requestUuid):
 
 func71('9c0772b8-c809-4865-bec7-70dd2013bc37')
 
+
+
+
+
 def func72():
     print("funcionalidade 7.2 - Percentagem da populac̃ao da cidade com servico eletrico autorizado(")
+    query = model.casa_info.select()
+    
+    for casa in query:
+        
+PM389752470BR
 
 def func73():
     print("funcionalidade 7.3 - Consumo de energia de edif́ıcios p ́ublicos por ano(")

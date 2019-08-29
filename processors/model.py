@@ -16,6 +16,7 @@ class casa_info(Model):
     public_building = BooleanField()
     tensao_nominal = DoubleField()
     localizacao = CharField()
+    cidade = IntegerField()
 
     class Meta:
         database = mysql_db
@@ -62,6 +63,7 @@ class last_event(Model):
 def createTables():
     mysql_db.connect()
     casa_info.create_table()
+    city_infos.create_tables()
     consumo_dia.create_table()
     consumo_mes.create_table()
     iso_functionalities.create_table()
@@ -103,6 +105,8 @@ def getMysqlInstance():
 #query = casa_info.select()
 #for casa in query:
 #    print(casa.nr_residentes)
+
+#city_infos.create(id=1, city='passo fundo', nr_habitantes = 200000)
 
 def getById(uuid):
     mysql_db.connect()
