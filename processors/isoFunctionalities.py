@@ -33,7 +33,7 @@ def func71(requestUuid):
                 energymedium = totalEnergy/casa.nr_residentes
             print("Energia media gasta por residentes: ", energymedium, "kWh")
 
-func71('9c0772b8-c809-4865-bec7-70dd2013bc37')
+#func71('9c0772b8-c809-4865-bec7-70dd2013bc37')
 
 
 
@@ -42,10 +42,13 @@ func71('9c0772b8-c809-4865-bec7-70dd2013bc37')
 def func72():
     print("funcionalidade 7.2 - Percentagem da populac̃ao da cidade com servico eletrico autorizado(")
     query = model.casa_info.select()
-    
+    #querycasa = model.city_infos.select()
     for casa in query:
-        
-PM389752470BR
+        print(casa)
+
+func72()
+
+#PM389752470BR
 
 def func73():
     print("funcionalidade 7.3 - Consumo de energia de edif́ıcios p ́ublicos por ano(")
@@ -54,7 +57,7 @@ def func75():
     print("funcionalidade 7.5 - Uso  total  de  energia  eletrica  per  capita(")
 
 def func76():
-    print("funcionalidade 7.6 - Numero m edio de interrupc̃oes eletricas por cliente por ano(")
+    print("funcionalidade 7.6 - Numero medio de interrupc̃oes eletricas por cliente por ano(")
 
 def func77():
     print("funcionalidade 7.7 - Duração médio de interrupções elétricas")

@@ -87,7 +87,7 @@ def upaupa_servidor_tcp(n_eventos):
         "energy_ativa": dados.energy_ativa,
         "voltage_real_rms": dados.rmsVoltage_real,
         "phase_real_rms": dados.rmsPhase_real,
-        "total_energy_daily": interscityManager.getDataDaily(DEFAULT_UUID)
+       # "total_energy_daily": interscityManager.getDataDaily(DEFAULT_UUID)
         }
         requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
 
