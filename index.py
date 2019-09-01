@@ -21,6 +21,7 @@ def handle_message(teste):
     disconnect()
     
 
+
 @socketio.on('disconnect')
 def test_disconnect():
     print('Client disconnected')
