@@ -92,6 +92,7 @@ def func75():
         total = totalEnergy/nrresidentes
         print(total)
         return total
+        
 def func76():
     print("funcionalidade 7.6 - Numero medio de interrupc̃oes eletricas por cliente por ano(")
 
