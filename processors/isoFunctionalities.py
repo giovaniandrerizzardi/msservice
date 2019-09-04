@@ -46,16 +46,52 @@ def func72():
     for casa in query:
         print(casa)
 
-func72()
+#func72()
 
 #PM389752470BR
 
 def func73():
-    print("funcionalidade 7.3 - Consumo de energia de edif́ıcios p ́ublicos por ano(")
+    print("funcionalidade 7.3 - Consumo de energia de edif́ıcios p ublicos por ano")
+    query = model.casa_info.select().where(model.casa_info.public_building == 1)
+    for casa in query:
+        energymedium = 0
+        print("consultando dados da casa " , casa.uuid, "com ", casa.nr_residentes, " residentes.")
+        r = interscityManager.getDataByUUID(casa.uuid)
+        if r.status_code == 200 :   
+            data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+            if data.resources == []:
+                print ("Nenhum evento cadastrado nesta casa.")
+                return 0
+            else:
+                pass
+                infoConsumoList = data.resources[0].capabilities.infoConsumo
+                totalEnergy = 0
+
+                for s in infoConsumoList:
+                    totalEnergy += s.energy_ativa
+                print("totalEnergy = ", totalEnergy)
+                return totalEnergy
+
 
 def func75():
     print("funcionalidade 7.5 - Uso  total  de  energia  eletrica  per  capita(")
+    nrresidentes = model.casa_info.select(fn.SUM(model.casa_info.nr_residentes))
+    r = interscityManager.getDynamicData(None, None)
+    if r.status_code == 200 : 
+        data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+        if data.resources == []:
+            print ("Nenhum evento cadastrado nesta casa.")
+            return 0
+        else:
+            pass
+            infoConsumoList = data.resources[0].capabilities.infoConsumo
+            totalEnergy = 0
 
+            for s in infoConsumoList:
+                totalEnergy += s.energy_ativa
+        total = totalEnergy/nrresidentes
+        print(total)
+        return total
 def func76():
     print("funcionalidade 7.6 - Numero medio de interrupc̃oes eletricas por cliente por ano(")
 
