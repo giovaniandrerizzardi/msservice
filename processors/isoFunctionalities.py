@@ -51,10 +51,10 @@ def func72():
 #PM389752470BR
 
 def func73():
-    print("funcionalidade 7.3 - Consumo de energia de edif́ıcios p ublicos por ano")
+    print("funcionalidade 7.3 - Consumo de energia de edif́ıcios publicos por ano")
     query = model.casa_info.select().where(model.casa_info.public_building == 1)
     for casa in query:
-        energymedium = 0
+        
         print("consultando dados da casa " , casa.uuid, "com ", casa.nr_residentes, " residentes.")
         r = interscityManager.getDataByUUID(casa.uuid)
         if r.status_code == 200 :   
@@ -63,7 +63,7 @@ def func73():
                 print ("Nenhum evento cadastrado nesta casa.")
                 return 0
             else:
-                pass
+                
                 infoConsumoList = data.resources[0].capabilities.infoConsumo
                 totalEnergy = 0
 
@@ -95,6 +95,21 @@ def func75():
         
 def func76():
     print("funcionalidade 7.6 - Numero medio de interrupc̃oes eletricas por cliente por ano(")
+   
+    query = model.casa_info.select()
+
+    for casa in query:
+        r = interscityManager.getDynamicData(casa.uuid, 'infoConsumo.Event_count_texas eq 0')
+        if r.status_code == 200:
+            data = json.loads(r.text, object_hook=lambda d: namedtuple(
+                'X', d.keys())(*d.values()))
+            if data.resources == []:
+                print("Nenhum evento cadastrado nesta casa.")
+            else:
+                pass
+                infoConsumoList = data.resources[0].capabilities.infoConsumo
+        
+                print("Numero de interrupcoes = ", len(infoConsumoList))
 
 def func77():
     print("funcionalidade 7.7 - Duração médio de interrupções elétricas")
