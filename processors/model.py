@@ -1,7 +1,7 @@
 #pip install pymysql
 #pip install peewee
 
-from peewee import MySQLDatabase,CharField,IntegerField,Model,DoubleField,BooleanField,DateTimeField
+from peewee import MySQLDatabase,CharField,IntegerField,Model,DoubleField,BooleanField,DateTimeField,fn
 import datetime
 import pymysql
 
@@ -111,4 +111,4 @@ def getMysqlInstance():
 def getById(uuid):
     mysql_db.connect()
     return casa_info.get_by_id(uuid)
-    mysql_db.close()
+    #mysql_db.close()

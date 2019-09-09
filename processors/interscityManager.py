@@ -37,6 +37,12 @@ def getDataByUUID(uuid):
     #print(r.text)
     return r
 
+def getALLData():
+    url = 'http://127.0.0.1:8000/collector/resources/data'
+    r = requests.get(url)
+    #print(r.text)
+    return r
+
 def getDataDaily(uuid):
     uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
     url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
@@ -102,7 +108,7 @@ def getDynamicData(uuid, parameterString):
    #     url+= '/'+parameterString
     print (url)
     r = requests.post(url, json=parameterString)
-    print (r.text)
-    return r.text
+    #print (r.text)
+    return r
 #olhar o online playgroud pra colocar o json  dinamico aqui
 #getDynamicData('9c0772b8-c809-4865-bec7-70dd2013bc37','{start_date":"2019-07-14T14:56:20","end_date":"2019-07-16T14:56:20"}')
