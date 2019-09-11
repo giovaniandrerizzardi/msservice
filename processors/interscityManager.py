@@ -3,6 +3,8 @@ import json
 from datetime import date, datetime, timedelta
 from collections import namedtuple
 
+DEFAULT_URL = 'http://127.0.0.1:8000'
+
 def serialize(obj):
     if isinstance(obj, date):
         serial = obj.isoformat()
@@ -110,5 +112,11 @@ def getDynamicData(uuid, parameterString):
     r = requests.post(url, json=parameterString)
     #print (r.text)
     return r
-#olhar o online playgroud pra colocar o json  dinamico aqui
-#getDynamicData('9c0772b8-c809-4865-bec7-70dd2013bc37','{start_date":"2019-07-14T14:56:20","end_date":"2019-07-16T14:56:20"}')
+
+def getResourceByUuid(uuid):
+    print("Buscando um recurso pelo uuid -> ", uuid)
+    r = requests.get(DEFAULT_URL + '/catalog/resources/'+uuid)
+    print(r.text)
+    return r
+
+#getResourceByUuid('30b057a1-a28a-4460-8784-77ba0f0801f9')

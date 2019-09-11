@@ -32,7 +32,7 @@ def func71(requestUuid):
                 print("totalEnergy = ", totalEnergy)
                 energymedium = totalEnergy/casa.nr_residentes
             print("Energia media gasta por residentes: ", energymedium, "kWh")
-
+            return energymedium
 #func71('9c0772b8-c809-4865-bec7-70dd2013bc37')
 
 
@@ -105,7 +105,49 @@ def func76():
     query = model.casa_info.select()
 
     for casa in query:
-        r = interscityManager.getDynamicData(casa.uuid, 'infoConsumo.Event_count_texas eq 0')
+        datajson = {
+            "capabilities": [
+                "infoConsumo"
+            ],
+            "matchers": {
+                "Event_count_texas.eq": 1
+            }
+        }         
+        r = interscityManager.getDynamicData(casa.uuid, datajson)
+        if r.status_code == 200:
+            data = json.loads(r.text, object_hook=lambda d: namedtuple(
+                'X', d.keys())(*d.values()))
+            if data.resources == []:
+                print("Nenhum evento cadastrado nesta casa.")
+            else:
+                infoConsumoList = data.resources[0].capabilities.infoConsumo
+        
+                print("Numero de interrupcoes = ", len(infoConsumoList))
+                return len(infoConsumoList)
+#func76()
+
+def func77(requestUuid):
+    print("funcionalidade 7.7 - Duração médio de interrupções elétricas")
+    query = []
+    if requestUuid == '':
+        print("é  para varios uuids")
+        query = model.casa_info.select()
+    else:
+        print("é somente um uuid")
+        query = model.casa_info.select().where(model.casa_info.uuid == requestUuid)
+    
+    for casa in query:
+        datajson = {
+            "capabilities": [
+                "infoConsumo"
+            ],
+            "matchers": {
+                "Event_count_texas.eq": 1
+            }
+        }   
+
+        r = interscityManager.getDynamicData(casa.uuid, datajson)
+
         if r.status_code == 200:
             data = json.loads(r.text, object_hook=lambda d: namedtuple(
                 'X', d.keys())(*d.values()))
@@ -114,10 +156,8 @@ def func76():
             else:
                 pass
                 infoConsumoList = data.resources[0].capabilities.infoConsumo
-        
-                print("Numero de interrupcoes = ", len(infoConsumoList))
+                for s in infoConsumoList:
+                    print(s.date)
 
-#func76()
-
-def func77():
-    print("funcionalidade 7.7 - Duração médio de interrupções elétricas")
+#
+#func77('')

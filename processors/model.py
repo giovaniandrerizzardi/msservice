@@ -98,7 +98,7 @@ def addcasa_info(Uuid, nrResidentes, correnteNominal, publicBuilding,tensaoNomin
 
 
 #resetTables()
-#addcasa_info('9c0772b8-c809-4865-bec7-70dd2013bc37',5,2,0,220,'lat:12345#lon:12345')
+#addcasa_info('30b057a1-a28a-4460-8784-77ba0f0801f9',3,2,0,220,'lat:12345#lon:12345')
 def getMysqlInstance():
     mysql_db.connect()
     return mysql_db
