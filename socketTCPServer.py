@@ -6,7 +6,7 @@ from processors import decoder, interscityManager
 TCP_IP='192.168.1.250'
 TCP_PORT=7891
 FLAG_TCP_ON=1
-BUFFER_SIZE=15400
+BUFFER_SIZE=15488
 DEFAULT_UUID = '9c0772b8-c809-4865-bec7-70dd2013bc37'
 
 def upaupa_servidor_tcp(n_eventos):
@@ -89,9 +89,9 @@ def upaupa_servidor_tcp(n_eventos):
         "phase_real_rms": dados.rmsPhase_real,
        # "total_energy_daily": interscityManager.getDataDaily(DEFAULT_UUID)
         }
-        requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
+       # requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
 
-        interscityManager.sendInfoToInterSCity(dados)
+       # interscityManager.sendInfoToInterSCity(dados)
         print("EVENTO:", dados)
         if cont == n_eventos:
             print("CHEGAAAAAAAAAAAAAAAAAAA")

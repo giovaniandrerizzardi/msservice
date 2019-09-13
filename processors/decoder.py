@@ -29,7 +29,7 @@ N_AMOSTRAS = 256
 N_CICLOS = 10
 N_TOTAL_AMOSTRAS = N_AMOSTRAS * N_CICLOS
 
-HEADER_SIZE = 40            # header bytes lenght
+HEADER_SIZE = 128            # header bytes lenght
 DATA_SIZE = 15360               # data size in bytes
 TOTAL_SIZE = HEADER_SIZE + DATA_SIZE    # expected msg size in bytes
 SAMPLES_OFFSET = 3840           # interval among sampled block raw data
@@ -203,10 +203,16 @@ def processData_decode(msg, mostra=1):
     dados.tempo_total = hex2float(int(header[6]<<24 | header[7]<<16 | header[8]<<8 | header[9]))
     dados.energy_aparente = hex2float(int(header[10]<<24 | header[11]<<16 | header[12]<<8 | header[13]))
     dados.energy_ativa = hex2float(int(header[14]<<24 | header[15]<<16 | header[16]<<8 | header[17]))
-    dados.energy_reativa = hex2float(int(header[18]<<24 | header[19]<<16 | header[20]<<8 | header[21]))
+    dados.energy_reativa = hex2float(int(header[18]<<24 | header[19]<<16 | header[20]<<8 | header[21])
+    )
 
     dados.erro_VAr = int( ((header[25])<<24) + ((header[24])<<16) + ((header[23])<<8) + (header[22]))  # int
-
+    uuidbyte = list(header[26:62])
+    uuid  = ""
+    
+    for r in uuidbyte:
+        uuid += chr(r)
+    print("UUID AQUI: ",uuid)
     # está no firmware do TEXAS TM4C como constantes e aqui tambem
     dados.phaseOffset = IFASE_OFFSET
     dados.diffOffset = IDIFF_OFFSET
