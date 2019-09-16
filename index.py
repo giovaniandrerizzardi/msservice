@@ -1,33 +1,23 @@
 from processors import decoder, interscityManager
-from flask import Flask, render_template
-from flask_socketio import SocketIO, disconnect
+from flask import Flask, request
+from flask_restful import Resource, Api
+from processors import model, interscityManager
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
+api = Api(app)
+
+todos = {}
 
 
-@socketio.on('connect')
-def test_connect():
-    socketio.emit('my response', {'data': 'Connected'})
-    
-@socketio.on('teste')
-def handle_message(teste):
-    print('received message: ' + teste)
-    print("Sending Event code to processor")
-    dados = decoder.processData_decode(teste)
-   
-    interscityManager.sendInfoToInterSCity(dados)
-    disconnect()
-    
+class Test(Resource):
+    def post(self):
+        
+        json_data = request.get_json(force=True)
+        print(json_data)
+        return {}
 
 
-@socketio.on('disconnect')
-def test_disconnect():
-    print('Client disconnected')
-
-
+api.add_resource(Test, '/cadastroRecurso')
 
 if __name__ == '__main__':
-    socketio.run(app,port=7877)
-
+    app.run(debug=True, port=4501)

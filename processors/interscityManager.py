@@ -119,4 +119,7 @@ def getResourceByUuid(uuid):
     print(r.text)
     return r
 
+def cadastraRecurso():
+    
+
 #getResourceByUuid('30b057a1-a28a-4460-8784-77ba0f0801f9')
