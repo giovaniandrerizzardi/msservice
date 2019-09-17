@@ -64,7 +64,7 @@ class objHeader_:
     energy_ativa = 0.0
     energy_reativa = 0.0
     erro_VAr = 0
-
+    uuid = ''
 
 class objSamples_():
     phase = []
@@ -212,7 +212,9 @@ def processData_decode(msg, mostra=1):
     
     for r in uuidbyte:
         uuid += chr(r)
-    print("UUID AQUI: ",uuid)
+    print("UUID : ",uuid)
+    dados.uuid = uuid
+
     # está no firmware do TEXAS TM4C como constantes e aqui tambem
     dados.phaseOffset = IFASE_OFFSET
     dados.diffOffset = IDIFF_OFFSET

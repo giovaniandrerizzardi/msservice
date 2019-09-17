@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import Form
-from wtforms import TextField, IntegerField, SelectField
+from wtforms import TextField, IntegerField, SelectField, BooleanField
+from processors import interscityManager
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'our very hard to guess secretfir'
@@ -39,13 +40,17 @@ def sign_up():
 
 
 class RegistrationForm(Form):
+    cpf = IntegerField('cpf')
     first_name = TextField('First Name')
     last_name = TextField('Last Name')
     nr_residentes = IntegerField('Nr Residentes')
+    corrente_nominal = TextField('Corrente Nominal')
+    tensao_nominal = TextField('Tensao Nominal')
+    public_building = BooleanField('Edificio Publico')
     latitude = TextField('Latitude')
     longitude = TextField('Longitude')
     cidade = SelectField(u'Programming Language', choices=[
-                ('cpp', 'C++'), ('py', 'Python'), ('text', 'Plain Text')])
+                ('1', 'C++'), ('2', 'Python'), ('text', 'Plain Text')])
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -56,6 +61,9 @@ def register():
         first_name = form.first_name.data
         last_name = form.last_name.data
         nr_residentes = form.nr_residentes.data
+        corrente_nominal = form.corrente_nominal.data
+        tensao_nominal = form.tensao_nominal.data
+        public_building = form.public_building.data
         latitude = form.latitude.data
         longitude = form.longitude.data
         cidade = form.cidade.data
@@ -63,10 +71,10 @@ def register():
         if len(first_name) == 0 or len(last_name) == 0:
             error = "Please supply both first and last name"
         else:
+            interscityManager.cadastraRecurso(form)
             return redirect(url_for('thank_you'))
 
     return render_template('register.html', form=form, message=error)
-
 
 # Run the application
 app.run(debug=True)

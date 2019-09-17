@@ -15,7 +15,8 @@ class casa_info(Model):
     corrente_nominal = DoubleField()
     public_building = BooleanField()
     tensao_nominal = DoubleField()
-    localizacao = CharField()
+    latitude = CharField()
+    longitude = CharField()
     cidade = IntegerField()
 
     class Meta:
@@ -90,9 +91,9 @@ def addNewCasa(casaUuid, nrResidentes, correnteNominal, publicBuilding):
     casa_info.insert(uuid=casaUuid, nr_residentes=nrResidentes, corrente_nominal=correnteNominal ,public_building=publicBuilding)
     casa_info.insert(UUIDField = casaUuid)
 
-def addcasa_info(Uuid, nrResidentes, correnteNominal, publicBuilding,tensaoNominal,Nlocalizacao):
+def addcasa_info(Uuid, nrResidentes, correnteNominal, publicBuilding,tensaoNominal,Nlatitude, Nlongitude):
     mysql_db.connect()
-    casa_info.create(uuid = Uuid, nr_residentes=nrResidentes, corrente_nominal=correnteNominal ,public_building=publicBuilding, tensao_nominal = tensaoNominal, localizacao = Nlocalizacao)
+    casa_info.create(uuid = Uuid, nr_residentes=nrResidentes, corrente_nominal=correnteNominal ,public_building=publicBuilding, tensao_nominal = tensaoNominal, latitude = Nlatitude, longitude = Nlongitude)
     mysql_db.close()
 
 

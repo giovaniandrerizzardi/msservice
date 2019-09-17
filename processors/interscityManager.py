@@ -2,6 +2,7 @@ import requests
 import json
 from datetime import date, datetime, timedelta
 from collections import namedtuple
+import model,interscityManager
 
 DEFAULT_URL = 'http://127.0.0.1:8000'
 
@@ -22,9 +23,10 @@ def sendInfoToInterSCity(dados):
     infoConsumo = {  
         "data":{"infoConsumo": [data]}
     }
-   # print(infoConsumo)
-    #print(json.dumps(infoConsumo))
-    r = requests.post('http://127.0.0.1:8000/adaptor/resources/9c0772b8-c809-4865-bec7-70dd2013bc37/data',json=infoConsumo)
+   
+    url = 'http://127.0.0.1:8000/adaptor/resources/'+ dados.uuid + '/data'
+
+    r = requests.post(url,json=infoConsumo)
     print(r.status_code, r.reason)
     if r.status_code != 200 :
         return
@@ -46,11 +48,16 @@ def getALLData():
     return r
 
 def getDataDaily(uuid):
-    uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
+    #uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
+
     url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
+
     now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%d/%m/%Y %H:%M:%S")
+   
     print ("Get Daily Energy information with range ", yesterday, " until ", now)
+    
     r = requests.post(url, json={'start_date': yesterday, 'end_date': now})
    
     data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
@@ -71,7 +78,7 @@ def getDataDaily(uuid):
 
 
 def getDataByRange(uuid, startDate, endDate):
-    uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
+    #uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
     url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
     print ("Get Energy information with range ", startDate, " until ", endDate)
     r = requests.post(url, json={'start_date': startDate, 'end_date': endDate})
@@ -119,7 +126,37 @@ def getResourceByUuid(uuid):
     print(r.text)
     return r
 
-def cadastraRecurso():
+def cadastraRecurso(form):
+
+    first_name = form.first_name.data
+    last_name = form.last_name.data
+    nr_residentes = form.nr_residentes.data
+    corrente_nominal = form.corrente_nominal.data
+    tensao_nominal = form.tensao_nominal.data
+    public_building = form.public_building.data
+    latitude = form.latitude.data
+    longitude = form.longitude.data
+    cidade = form.cidade.data
     
+
+    description = 'Casa do:'+ first_name + ' ' + last_name
+    data = {
+        "data": {
+            "lat": latitude,
+            "lon": longitude,
+            "description": description,
+            "capabilities": [
+                "infoConsumo"
+            ],
+            "status": "active"
+        }
+    }
+    url = 'http://127.0.0.1:8000/catalog/resources'
+    response = requests.post(url,json=data)
+
+    print(response.text)
+    resource = json.loads(response.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    model.addcasa_info(resource.uuid, nr_residentes, corrente_nominal, public_building,tensao_nominal,latitude,longitude)
+    #Uuid, nrResidentes, correnteNominal, publicBuilding,tensaoNominal,Nlocalizacao
 
 #getResourceByUuid('30b057a1-a28a-4460-8784-77ba0f0801f9')
