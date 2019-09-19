@@ -2,7 +2,7 @@ import requests
 import json
 from datetime import date, datetime, timedelta
 from collections import namedtuple
-import model,interscityManager
+from processors import model
 
 DEFAULT_URL = 'http://127.0.0.1:8000'
 
@@ -17,6 +17,9 @@ def serialize(obj):
 def sendInfoToInterSCity(dados):
     #alerts = alertCheck(infos)
     
+    print("Adicionando o ultimo evento no banco")
+    model.add_event(dados.uuid, 1)
+
     dados.timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     data = serialize(dados)
     print("enviando os dados do evento numero " + str(dados.Event_count_texas))
@@ -130,15 +133,14 @@ def cadastraRecurso(form):
 
     first_name = form.first_name.data
     last_name = form.last_name.data
-    nr_residentes = form.nr_residentes.data
+    nr_residentes = int(form.nr_residentes.data)
     corrente_nominal = form.corrente_nominal.data
     tensao_nominal = form.tensao_nominal.data
-    public_building = form.public_building.data
-    latitude = form.latitude.data
-    longitude = form.longitude.data
-    cidade = form.cidade.data
+    public_building = bool(form.public_building.data)
+    latitude = float(form.latitude.data)
+    longitude = float(form.longitude.data)
+    cidade= int(form.cidade.data)
     
-
     description = 'Casa do:'+ first_name + ' ' + last_name
     data = {
         "data": {
@@ -155,8 +157,9 @@ def cadastraRecurso(form):
     response = requests.post(url,json=data)
 
     print(response.text)
-    resource = json.loads(response.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-    model.addcasa_info(resource.uuid, nr_residentes, corrente_nominal, public_building,tensao_nominal,latitude,longitude)
-    #Uuid, nrResidentes, correnteNominal, publicBuilding,tensaoNominal,Nlocalizacao
+    data = json.loads(response.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+
+    model.addcasa_info(data.data.uuid, nr_residentes, corrente_nominal, public_building,tensao_nominal,latitude,longitude,cidade)
+
 
 #getResourceByUuid('30b057a1-a28a-4460-8784-77ba0f0801f9')

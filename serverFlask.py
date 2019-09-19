@@ -77,4 +77,4 @@ def register():
     return render_template('register.html', form=form, message=error)
 
 # Run the application
-app.run(debug=True)
+app.run(debug=True, port= 4567)
