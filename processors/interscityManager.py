@@ -19,6 +19,8 @@ def sendInfoToInterSCity(dados):
     
     print("Adicionando o ultimo evento no banco")
     model.add_event(dados.uuid, 1)
+    query = model.last_event.select().limit(1).get()
+    dados.Event_count_texas_tot = query.id
 
     dados.timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     data = serialize(dados)
