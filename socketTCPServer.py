@@ -78,9 +78,9 @@ def upaupa_servidor_tcp(n_eventos):
         conn.close()
        # files = open("conjuntoTeste.txt","a+")
         dados = decoder.processData_decode(msg)
-      #  files.write(str(msg))
-       # files.write("FIMDOEVENTO")
-       # files.close()
+        #files.write(str(msg))
+        #files.write("FIMDOEVENTO")
+        #files.close()
         
         datajson = {
         "event_type": dados.Event,
@@ -89,9 +89,9 @@ def upaupa_servidor_tcp(n_eventos):
         "phase_real_rms": dados.rmsPhase_real,
        # "total_energy_daily": interscityManager.getDataDaily(DEFAULT_UUID)
         }
-       # requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
+        requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
 
-       # interscityManager.sendInfoToInterSCity(dados)
+        interscityManager.sendInfoToInterSCity(dados)
         print("EVENTO:", dados)
         if cont == n_eventos:
             print("CHEGAAAAAAAAAAAAAAAAAAA")
