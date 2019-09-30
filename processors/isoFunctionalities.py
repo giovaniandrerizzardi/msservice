@@ -1,5 +1,4 @@
-import interscityManager
-import model
+from processors import interscityManager,model
 import json
 from collections import namedtuple
 from peewee import fn

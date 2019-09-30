@@ -37,6 +37,13 @@ def sendInfoToInterSCity(dados):
         return
     print (r.request.body)
 
+def getLastDataByUUID(uuid):
+    url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data/last'
+    r = requests.get(url)
+    #print(r.text)
+    return r
+
+
 def alertCheck(infos):
     return infos
 

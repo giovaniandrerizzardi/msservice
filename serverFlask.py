@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import Form
 from wtforms import TextField, IntegerField, SelectField, BooleanField
-from processors import interscityManager
-
+from processors import interscityManager,mapFuncionalities
+import json
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'our very hard to guess secretfir'
 
@@ -75,6 +75,32 @@ def register():
             return redirect(url_for('thank_you'))
 
     return render_template('register.html', form=form, message=error)
+
+@app.route('/initialMap', methods=['GET'])
+def attInitialMap():
+    #print(mapFuncionalities.initialMapData())
+    datajson = [
+                    {
+                        "uuid": "qwer",
+                        "event_type": "sdff",
+                        "energy_ativa": "sd",
+                        "voltage_real_rms": "sddd",
+                        "phase_real_rms": "f",
+                        "lat": "1234",
+                        "lon": "12432"
+                    },
+                    {
+                        "uuid": "qweryy",
+                        "event_type": "sdff",
+                        "energy_ativa": "sd",
+                        "voltage_real_rms": "sddd",
+                        "phase_real_rms": "f",
+                        "lat": "1234",
+                        "lon": "12432"
+                    }
+                ]
+
+    return json.dumps(datajson)
 
 # Run the application
 app.run(debug=True, port= 4567)

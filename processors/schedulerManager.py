@@ -1,7 +1,10 @@
 #pip install schedule
+from processors import interscityManager,isoFunctionalities,model
 import schedule
 import time
-import interscityManager, isoFunctionalities
+import json
+from collections import namedtuple
+import requests
 
 iso = isoFunctionalities
 
@@ -12,6 +15,10 @@ def dailyProcessing():
     uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
     data = interscityManager.getDataDaily(uuid)
     print (data)
+
+
+
+
 
 schedule.every(1).minutes.do(job)
 schedule.every(1).minutes.do(iso.func71)
