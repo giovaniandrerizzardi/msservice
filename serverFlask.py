@@ -81,22 +81,24 @@ def attInitialMap():
     #print(mapFuncionalities.initialMapData())
     datajson = [
                     {
-                        "uuid": "qwer",
-                        "event_type": "sdff",
-                        "energy_ativa": "sd",
-                        "voltage_real_rms": "sddd",
-                        "phase_real_rms": "f",
-                        "lat": "1234",
-                        "lon": "12432"
+                        "uuid": "123.123.123.123",
+                        "event_type": "EVENT_UP",
+                        "energy_ativa": "123",
+                        "voltage_real_rms": "220",
+                        "phase_real_rms": "1234",
+                        "lat": -28.26278,
+                        "lon": -52.40667,
+                        "alert_info": "none"
                     },
                     {
-                        "uuid": "qweryy",
-                        "event_type": "sdff",
-                        "energy_ativa": "sd",
-                        "voltage_real_rms": "sddd",
-                        "phase_real_rms": "f",
-                        "lat": "1234",
-                        "lon": "12432"
+                        "uuid": "4324.423423.32423.423.44",
+                        "event_type": "EVENT_DOWN",
+                        "energy_ativa": "123",
+                        "voltage_real_rms": "432",
+                        "phase_real_rms": "123",
+                        "lat": -28.27278,
+                        "lon": -52.40667,
+                        "alert_info": "Sobretensão"
                     }
                 ]
 
