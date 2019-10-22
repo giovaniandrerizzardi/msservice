@@ -4,7 +4,7 @@ from collections import namedtuple
 import requests
 
 def initialMapData():
-    uuids = model.casa_info.select(model.casa_info.uuid)
+    uuids = model.casa_info.select()
 
     response = []
 
@@ -19,14 +19,15 @@ def initialMapData():
             else:
                 infoConsumoList = data.resources[0].capabilities.infoConsumo
                 for dados in infoConsumoList:
+                    print (casa.latitude)
                     datajson = {
-                        "uuid": dados.uuid,
+                        "uuid":casa.uuid,
                         "event_type": dados.Event,
-                        "energy_ativa": dados.energy_ativa,
-                        "voltage_real_rms": dados.rmsVoltage_real,
-                        "phase_real_rms": dados.rmsPhase_real,
-                        "lat": -28.26278,
-                        "lon": -52.40667,
+                        "energy_ativa": round(float(dados.energy_ativa), 2),
+                        "voltage_real_rms": round(float(dados.rmsVoltage_real), 2),
+                        "phase_real_rms": round(float(dados.rmsPhase_real), 2),
+                        "lat": float(casa.latitude),
+                        "lon": float(casa.longitude),
                         "alert_info": "none"
                         #"total_energy_daily": interscityManager.getDataDaily("9c0772b8-c809-4865-bec7-70dd2013bc37")
                     }
@@ -34,4 +35,5 @@ def initialMapData():
                     response.append(datajson)
                     break
     print(response)
-    requests.post("http://127.0.0.1:1880/initial", json=response)
+    return response
+    #requests.post("http://127.0.0.1:1880/initial", json=response)

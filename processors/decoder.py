@@ -1,6 +1,7 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
 
+from processors import alertChecker
 import math
 
 # ter instalado antes esses modulos:
@@ -70,6 +71,7 @@ class objHeader_:
     energy_reativa = 0.0
     erro_VAr = 0
     uuid = ''
+    alerta = ''
 
 class objSamples_():
     phase = []
@@ -243,6 +245,7 @@ def processData_decode(msg, mostra=1):
     dados.rmsVoltage_real = (rms_np(voltage_real[ciclo*256:(ciclo*256+512)])).item()
     dados.rmsLeakage_real = (rms_np(leakage_real[ciclo*256:(ciclo*256+512)])*1000).item()
     
+    dados.alerta = alertChecker.checkForAlert(dados)
     if mostra:
         print("netVersion", dados.netVersion)
         print("Event_count_texas", dados.Event_count_texas)
@@ -260,11 +263,10 @@ def processData_decode(msg, mostra=1):
         print("Valor RMS diff_real:", dados.rmsDiff_real, "mA")
         print("Valor RMS voltage_real:", dados.rmsVoltage_real, "V")
         print("Valor RMS leakage_real:", dados.rmsLeakage_real, "mA")
-
+        print("alerta:", dados.alerta)
     dados.n_channels = 4
     dados.Fs = N_AMOSTRAS*60.0
     dados.size = N_TOTAL_AMOSTRAS  # N_AMOSTRAS*N_CICLOS  # len(objSamples.voltage)
-
     return dados
 
 

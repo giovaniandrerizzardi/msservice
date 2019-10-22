@@ -78,14 +78,15 @@ def register():
 
 @app.route('/initialMap', methods=['GET'])
 def attInitialMap():
+    print(round(3.141592653589793, 2))
     #print(mapFuncionalities.initialMapData())
     datajson = [
                     {
-                        "uuid": "123.123.123.123",
+                        "uuid": "432f.4234h.423fj4.555f",
                         "event_type": "EVENT_UP",
-                        "energy_ativa": "123",
-                        "voltage_real_rms": "220",
-                        "phase_real_rms": "1234",
+                        "energy_ativa": "0.9kWh",
+                        "voltage_real_rms": "220V",
+                        "phase_real_rms": "0.25A",
                         "lat": -28.26278,
                         "lon": -52.40667,
                         "alert_info": "none"
@@ -102,7 +103,12 @@ def attInitialMap():
                     }
                 ]
 
-    return json.dumps(datajson)
+    return json.dumps(mapFuncionalities.initialMapData())
+
+@app.route('/dashboard1', methods=['GET'])
+def attdashboard():
+
+    return 
 
 # Run the application
 app.run(debug=True, port= 4567)
