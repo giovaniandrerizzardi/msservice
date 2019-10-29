@@ -3,6 +3,12 @@ from flask_wtf import Form
 from wtforms import TextField, IntegerField, SelectField, BooleanField
 from processors import interscityManager,mapFuncionalities
 import json
+from collections import namedtuple
+import datetime
+#from js.momentjs import moment
+#pip install moment
+import moment
+
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'our very hard to guess secretfir'
 
@@ -105,10 +111,22 @@ def attInitialMap():
 
     return json.dumps(mapFuncionalities.initialMapData())
 
-@app.route('/dashboard1', methods=['GET'])
+@app.route('/attdashboard', methods=['POST'])
 def attdashboard():
-
-    return 
+    args = request.args
+    
+    jsonBody = json.loads(str(request.json), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+   
+    print(jsonBody)
+    
+    dateFrom = jsonBody.dateFrom
+    print(dateFrom)
+    #dsd = '1571704042711'
+    #print(moment.unix(int(dsd)))
+    #dateFrom = time.strftime("%D %H:%M", time.localtime(int("1571093522494")))
+    #dateTo = datetime.fromtimestamp(args.get('dateTo'))
+    #print(dateFrom)
+    return "OK"
 
 # Run the application
 app.run(debug=True, port= 4567)
