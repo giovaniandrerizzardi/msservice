@@ -1,13 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import Form
 from wtforms import TextField, IntegerField, SelectField, BooleanField
-from processors import interscityManager,mapFuncionalities
+from processors import interscityManager,mapFuncionalities,isoFunctionalities
 import json
 from collections import namedtuple
 import datetime
 #from js.momentjs import moment
 #pip install moment
-import moment
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'our very hard to guess secretfir'
@@ -111,22 +111,51 @@ def attInitialMap():
 
     return json.dumps(mapFuncionalities.initialMapData())
 
-@app.route('/attdashboard', methods=['POST'])
+@app.route('/dashboard1', methods=['GET'])
 def attdashboard():
+    sec71 = isoFunctionalities.func71('')
+    sec72 = isoFunctionalities.func72('passo fundo')
+    sec73 = isoFunctionalities.func73()
+    sec75 = isoFunctionalities.func75()
+    sec76 = isoFunctionalities.func76()
+   # sec77 = isoFunctionalities.func77('')
+    print(sec71)
+    print(sec72)
+    print(sec73)
+    print(sec75)
+    print(sec76)
+    response = {
+        "71" : sec71,
+        "72" : sec72,
+        "73" : sec73,
+        "75" : sec75,
+        "76" : sec76,
+        "77" : "n ha"
+    }
+    
+    return response
+
+
+
+@app.route('/attdashboard', methods=['GET'])
+def attdashboardgraft():
     args = request.args
-    
-    jsonBody = json.loads(str(request.json), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    print(args['uuid'])
+    print(args['start'])
+    print(args['end'])
+    response = interscityManager.getDataByRange(args['uuid'],args['start'],args['end'])
+    #jsonBody = json.loads(str(request.json), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
    
-    print(jsonBody)
+    #print(jsonBody)
     
-    dateFrom = jsonBody.dateFrom
-    print(dateFrom)
+    #dateFrom = jsonBody.dateFrom
+    #print(dateFrom)
     #dsd = '1571704042711'
     #print(moment.unix(int(dsd)))
     #dateFrom = time.strftime("%D %H:%M", time.localtime(int("1571093522494")))
     #dateTo = datetime.fromtimestamp(args.get('dateTo'))
     #print(dateFrom)
-    return "OK"
+    return str(response)
 
 # Run the application
 app.run(debug=True, port= 4567)

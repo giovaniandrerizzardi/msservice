@@ -97,14 +97,14 @@ def getDataByRange(uuid, startDate, endDate):
    
     data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
     infoConsumoList = data.resources[0].capabilities.infoConsumo
-    totalDailyEnergy = 0
-    for s in infoConsumoList:
-        totalDailyEnergy += s.energy_ativa
+    #totalDailyEnergy = 0
+    #for s in infoConsumoList:
+    #    totalDailyEnergy += s.energy_ativa
    
-    print ("Daily total energy: ", totalDailyEnergy, "kWh")
+    #print ("Daily total energy: ", totalDailyEnergy, "kWh")
 
     #print(r.text)
-    return totalDailyEnergy
+    return infoConsumoList
 
 
 def postDynamicData(uuid, parameterString):
