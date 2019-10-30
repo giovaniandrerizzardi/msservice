@@ -2,9 +2,8 @@ import requests
 import json
 from datetime import date, datetime, timedelta
 from collections import namedtuple
-from processors import model
+from processors import model, environmentVariables
 
-DEFAULT_URL = 'http://127.0.0.1:8000'
 
 def serialize(obj):
     if isinstance(obj, date):
@@ -28,9 +27,9 @@ def sendInfoToInterSCity(dados):
     infoConsumo = {  
         "data":{"infoConsumo": [data]}
     }
-   
-    url = 'http://127.0.0.1:8000/adaptor/resources/'+ dados.uuid + '/data'
-
+    
+    #url = 'http://127.0.0.1:8000/adaptor/resources/'+ dados.uuid + '/data'
+    url = environmentVariables.INTERSCITY_MAIN_URL+'/adaptor/resources/' + dados.uuid + '/data'
     r = requests.post(url,json=infoConsumo)
     print(r.status_code, r.reason)
     if r.status_code != 200 :
@@ -98,12 +97,16 @@ def getDataByRange(uuid, startDate, endDate):
     data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
     infoConsumoList = data.resources[0].capabilities.infoConsumo
     #totalDailyEnergy = 0
-    #for s in infoConsumoList:
-    #    totalDailyEnergy += s.energy_ativa
-   
+    dados = []
+    
+    for s in infoConsumoList:
+        
+        dados.energy_ativa = s.energy_ativa
+        dados.date = s.date
     #print ("Daily total energy: ", totalDailyEnergy, "kWh")
 
     #print(r.text)
+
     return infoConsumoList
 
 
@@ -134,7 +137,8 @@ def getDynamicData(uuid, parameterString):
 
 def getResourceByUuid(uuid):
     print("Buscando um recurso pelo uuid -> ", uuid)
-    r = requests.get(DEFAULT_URL + '/catalog/resources/'+uuid)
+    r = requests.get(
+        environmentVariables.INTERSCITY_MAIN_URL + '/catalog/resources/'+uuid)
     print(r.text)
     return r
 

@@ -136,6 +136,23 @@ def attdashboard():
     return response
 
 
+@app.route('/lastEvent', methods=['GET'])
+def getLastEvent():
+    args = request.args
+    print(args['uuid'])
+    requestedUuid = args['uuid']
+    dados = interscityManager.getLastDataByUUID(requestedUuid)
+    datajson = {
+        "event_type": dados.Event,
+        "energy_ativa": dados.energy_ativa,
+        "voltage_real_rms": dados.rmsVoltage_real,
+        "phase_real_rms": dados.rmsPhase_real,
+        "alert_type": dados.alerta,
+        #"timestamp": dados.
+        "total_energy_daily": interscityManager.getDataDaily(requestedUuid)
+    }
+
+    return datajson
 
 @app.route('/attdashboard', methods=['GET'])
 def attdashboardgraft():
@@ -143,7 +160,8 @@ def attdashboardgraft():
     print(args['uuid'])
     print(args['start'])
     print(args['end'])
-    response = interscityManager.getDataByRange(args['uuid'],args['start'],args['end'])
+    response = 'sdsds'
+    #response = interscityManager.getDataByRange(args['uuid'],args['start'],args['end'])
     #jsonBody = json.loads(str(request.json), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
    
     #print(jsonBody)

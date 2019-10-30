@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css" crossorigin="anonymous">
+    <link href="css.css" rel="stylesheet" type="text/css" />
+    
+    
+    <!-- jQuery first, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="  crossorigin="anonymous"></script> <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js" crossorigin="anonymous"></script> 
+    
+    <script href="js.js"></script>
+</head>
+<body onload="wsConnect();" onunload="ws.disconnect();">
+
+<div class="container">
+    <div class="page-header">
+    <h1>Mapa de ultimo evento<small>:) </small></h1>
+    </div>
+</div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8 col-md-12"> 
+            <div id="map"></div>
+        </div>
+        <div class="col-4">
+            <h1>ISO37120</h1>
+            
+            <div id="funcs">
+                <h2>7.1</h2><p id="71">1</p>
+                <h2>7.1</h2><p id="71">1</p>
+                <h2>7.1</h2><p id="71">1</p>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+</div>
+<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key={{{payload.apikey}}}&callback=initMap">
+</script>
+
+</body>
+</html>

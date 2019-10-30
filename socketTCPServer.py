@@ -1,6 +1,6 @@
 import socket
 import requests
-from processors import decoder, interscityManager
+from processors import decoder, interscityManager, model
 # loop que fica "escutando" a porta que será de comunicaçao com a TM4C
 
 TCP_IP='192.168.1.250'
@@ -81,7 +81,11 @@ def upaupa_servidor_tcp(n_eventos):
         #files.write(str(msg))
         #files.write("FIMDOEVENTO")
         #files.close()
-        
+        if dados.alerta == 'none':
+            model.add_event(dados.uuid, False)
+        else:
+            model.add_event(dados.uuid, True)
+       
         datajson = {
         "event_type": dados.Event,
         "energy_ativa": dados.energy_ativa,
@@ -90,7 +94,7 @@ def upaupa_servidor_tcp(n_eventos):
         "alert_type": dados.alerta
        # "total_energy_daily": interscityManager.getDataDaily(DEFAULT_UUID)
         }
-        requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
+       # requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
 
         interscityManager.sendInfoToInterSCity(dados)
         print("EVENTO:", dados)

@@ -1,6 +1,7 @@
 from processors import decoder, interscityManager
 import json
 import requests
+
 dados = decoder.processData_decode("EV_276")
 #interscityManager.sendInfoToInterSCity(dados)
 
@@ -17,29 +18,7 @@ requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
 
 
 print ("OKKKKKKKKKKKKKKKK")
-msg = [{
-        "channel": "TEMP",
-        "dataset": [
-            {
-                "lon": -52.40667,
-                "lat": -28.26278,
-                "name": "Casa X",
-                "description": "Alerta SOBRETENSÃO ",
-                "value": 251,
-                "unit": "V",
-                "iconColor": "Red"
-            },
-            {
-                "lon": -52.40987,
-                "lat": -28.26578,
-                "name": "Casa Y",
-                "description": "Alerta SOBRETENSÃO ",
-                "value": 231,
-                "unit": "V",
-                "iconColor": "Yellow"
-            }
-        ]
-    }]
+
 
 
 #datamapjson = {"testemapa": str(msg2)}
