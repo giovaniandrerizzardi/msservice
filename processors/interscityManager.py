@@ -37,7 +37,7 @@ def sendInfoToInterSCity(dados):
     print (r.request.body)
 
 def getLastDataByUUID(uuid):
-    url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data/last'
+    url = environmentVariables.INTERSCITY_MAIN_URL + '/collector/resources/' + uuid + '/data/last'
     r = requests.get(url)
     #print(r.text)
     return r
@@ -47,13 +47,13 @@ def alertCheck(infos):
     return infos
 
 def getDataByUUID(uuid):
-    url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
+    url = environmentVariables.INTERSCITY_MAIN_URL + '/collector/resources/' + uuid + '/data'
     r = requests.get(url)
     #print(r.text)
     return r
 
 def getALLData():
-    url = 'http://127.0.0.1:8000/collector/resources/data'
+    url = environmentVariables.INTERSCITY_MAIN_URL + '/collector/resources/data'
     r = requests.get(url)
     #print(r.text)
     return r
@@ -61,7 +61,7 @@ def getALLData():
 def getDataDaily(uuid):
     #uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
 
-    url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
+    url = environmentVariables.INTERSCITY_MAIN_URL +'/collector/resources/' + uuid + '/data'
 
     now = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
@@ -90,7 +90,8 @@ def getDataDaily(uuid):
 
 def getDataByRange(uuid, startDate, endDate):
     #uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
-    url = 'http://127.0.0.1:8000/collector/resources/' + uuid + '/data'
+    url = environmentVariables.INTERSCITY_MAIN_URL + \
+        '/collector/resources/' + uuid + '/data'
     print ("Get Energy information with range ", startDate, " until ", endDate)
     r = requests.post(url, json={'start_date': startDate, 'end_date': endDate})
    
@@ -111,7 +112,7 @@ def getDataByRange(uuid, startDate, endDate):
 
 
 def postDynamicData(uuid, parameterString):
-    url = 'http://127.0.0.1:8000/collector/resources/'
+    url = environmentVariables.INTERSCITY_MAIN_URL + '/collector/resources/'
     if uuid != '':
         url +=uuid + '/data'
     else :
@@ -122,7 +123,7 @@ def postDynamicData(uuid, parameterString):
 
 
 def getDynamicData(uuid, parameterString):
-    url = 'http://127.0.0.1:8000/collector/resources/'
+    url = environmentVariables.INTERSCITY_MAIN_URL + '/collector/resources/'
     if uuid != '':
         url +=uuid + '/data'
     else :
@@ -166,13 +167,13 @@ def cadastraRecurso(form):
             "status": "active"
         }
     }
-    url = 'http://127.0.0.1:8000/catalog/resources'
+    url = environmentVariables.INTERSCITY_MAIN_URL + '/catalog/resources'
     response = requests.post(url,json=data)
 
     print(response.text)
     data = json.loads(response.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 
-    model.addcasa_info(data.data.uuid, nr_residentes, corrente_nominal, public_building,tensao_nominal,latitude,longitude,cidade)
-
+    #model.addcasa_info(data.data.uuid, nr_residentes, corrente_nominal, public_building,tensao_nominal,latitude,longitude,cidade)
+    #e62100d7-7d80-4c1c-a7fe-477813c15e21
 
 #getResourceByUuid('30b057a1-a28a-4460-8784-77ba0f0801f9')
