@@ -8,6 +8,11 @@ import datetime
 #from js.momentjs import moment
 #pip install moment
 
+import pandas as pd
+import datetime
+import numpy as np
+import operator
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'our very hard to guess secretfir'
@@ -161,9 +166,42 @@ def attdashboardgraft():
     print(args['start'])
     print(args['end'])
     response = 'sdsds'
-    #response = interscityManager.getDataByRange(args['uuid'],args['start'],args['end'])
+    response = interscityManager.getDataByRange(args['uuid'],args['start'],args['end'])
+    response = response.sort(key=operator.attrgetter('date'))
+
+    # Create a datetime variable for today
+    base = datetime.datetime.today()
+    # Create a list variable that creates 365 days of rows of datetime values
+    date_list = [base - datetime.timedelta(days=x) for x in range(0, 365)]
+    # Create a list variable of 365 numeric values
+    score_list = list(np.random.randint(low=1, high=1000, size=365))
+    # Create an empty dataframe
+    df = pd.DataFrame()
+
+    # Create a column from the datetime variable
+    df['datetime'] = date_list
+    # Convert that column into a datetime datatype
+    df['datetime'] = pd.to_datetime(df['datetime'])
+    # Set the datetime column as the index
+    df.index = df['datetime']
+    # Create a column from the numeric score variable
+    df['score'] = score_list
+
+    # Let's take a took at the data
+    df.head()
+    # Group the data by month, and take the mean for each group (i.e. each month)
+    df.resample('M').mean()
+    
+    # Group the data by month, and take the sum for each group (i.e. each month)
+    df.resample('M').sum()
+
+    #var m = {}
+    #m.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012']
+    #m.data = [[28, 48, 40, 19, 86, 27, 90]]
+    #m.series = ['Consumo']
+   #http://kodumaro.blogspot.com/2008/05/ordenando-uma-lista-de-objetos-em.html
+
     #jsonBody = json.loads(str(request.json), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-   
     #print(jsonBody)
     
     #dateFrom = jsonBody.dateFrom
@@ -173,7 +211,9 @@ def attdashboardgraft():
     #dateFrom = time.strftime("%D %H:%M", time.localtime(int("1571093522494")))
     #dateTo = datetime.fromtimestamp(args.get('dateTo'))
     #print(dateFrom)
-    return str(response)
+    return str(df.resample('M').sum())
+
+
 
 # Run the application
 app.run(debug=True, port= 4567)
