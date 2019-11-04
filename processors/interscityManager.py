@@ -17,19 +17,38 @@ def sendInfoToInterSCity(dados):
     #alerts = alertCheck(infos)
     
     print("Adicionando o ultimo evento no banco")
-    model.add_event(dados.uuid, 1)
-    query = model.last_event.select().limit(1).get()
-    dados.Event_count_texas_tot = query.id
+    lastEvent = {}
+    newEventId = 0
+    try:
+        print(dados.uuid)
+        lastEvent = model.last_event.select().where(model.last_event.uuid == dados.uuid).order_by(model.last_event.id_evento.desc()).get()
+        print('o ultimo evento foi : ', lastEvent)
+        newEventId = lastEvent.id_evento + 1
+        consumoEvento = round(float(dados.energy_ativa) - lastEvent.total_consume, 5)
+    except model.last_event.DoesNotExist:
+        print("DATA NOT FOUND")
+        consumoEvento = 0.0
 
+    
+
+    if dados.alerta == 'none':
+        model.add_event(newEventId, dados.uuid, consumoEvento, False)
+    else:
+        model.add_event(newEventId, dados.uuid, consumoEvento, True)
+
+    print('Evento atual:  ', newEventId)
+    dados.Event_count_texas_tot = newEventId
+    #return
     dados.timestamp = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     data = serialize(dados)
-    print("enviando os dados do evento numero " + str(dados.Event_count_texas))
+    print("enviando os dados do evento numero " + str(dados.Event_count_texas_tot))
     infoConsumo = {  
         "data":{"infoConsumo": [data]}
     }
     
     #url = 'http://127.0.0.1:8000/adaptor/resources/'+ dados.uuid + '/data'
     url = environmentVariables.INTERSCITY_MAIN_URL+'/adaptor/resources/' + dados.uuid + '/data'
+    print(url)
     r = requests.post(url,json=infoConsumo)
     print(r.status_code, r.reason)
     if r.status_code != 200 :
@@ -38,9 +57,18 @@ def sendInfoToInterSCity(dados):
 
 def getLastDataByUUID(uuid):
     url = environmentVariables.INTERSCITY_MAIN_URL + '/collector/resources/' + uuid + '/data/last'
+    print(url)
     r = requests.get(url)
-    #print(r.text)
-    return r
+    data = json.loads(r.text, object_hook=lambda d: namedtuple(
+        'X', d.keys())(*d.values()))
+    if data.resources == []:
+        print("Nenhum evento neste periodo.")
+        return
+    infoConsumoList = data.resources[0].capabilities.infoConsumo
+
+    for s in infoConsumoList:
+        return s
+    
 
 
 def alertCheck(infos):

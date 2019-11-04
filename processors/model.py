@@ -42,9 +42,11 @@ class consumo_mes(Model):
         database = mysql_db
 
 class last_event(Model):
-    id_evento = BigAutoField()
+    #id_evento = BigAutoField()
+    id_evento = DoubleField()
     uuid = CharField()
     timestamp = DateTimeField(default=datetime.datetime.now)
+    total_consume = DoubleField()
     have_alert = BooleanField()
     class Meta:
         database = mysql_db
@@ -86,10 +88,10 @@ def addcasa_info(Uuid, nrResidentes, correnteNominal, publicBuilding,tensaoNomin
     mysql_db.close()
 
 
-def add_event(Uuid, HaveAlert):
-    mysql_db.connect()
-    last_event.create(uuid = Uuid, have_alert = HaveAlert)
-    mysql_db.close()
+def add_event(IDEvento,Uuid, TotalConsume, HaveAlert):
+    #mysql_db.connect()
+    last_event.create(id_evento=IDEvento, uuid=Uuid, total_consume=TotalConsume, have_alert=HaveAlert)
+    #mysql_db.close()
 
 #resetTables()
 def getMysqlInstance():
@@ -105,4 +107,7 @@ def getMysqlInstance():
 def getById(uuid):
     mysql_db.connect()
     return casa_info.get_by_id(uuid)
+
     #mysql_db.close()
+
+

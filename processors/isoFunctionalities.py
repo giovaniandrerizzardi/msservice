@@ -134,7 +134,7 @@ def func77(requestUuid):
     else:
         print("é somente um uuid")
         query = model.casa_info.select().where(model.casa_info.uuid == requestUuid)
-    
+
     for casa in query:
         datajson = {
             "capabilities": [
@@ -144,19 +144,44 @@ def func77(requestUuid):
                 "Event_count_texas.eq": 1
             }
         }   
-
+        
         r = interscityManager.getDynamicData(casa.uuid, datajson)
-
+        
         if r.status_code == 200:
             data = json.loads(r.text, object_hook=lambda d: namedtuple(
                 'X', d.keys())(*d.values()))
             if data.resources == []:
                 print("Nenhum evento cadastrado nesta casa.")
             else:
-                pass
+                
                 infoConsumoList = data.resources[0].capabilities.infoConsumo
                 for s in infoConsumoList:
-                    print(s.date)
-
+                    print(s.Event_count_texas_tot)
+                    prevEvent = auxfunc(casa.uuid, s.Event_count_texas_tot)
+                    print('evento antes de desliga: ', prevEvent.date,
+                          ' data do desligamento : ', s.date)
+                return 0
 #
 #func77('')
+def auxfunc(requestUuid, id):
+     datajson = {
+         "capabilities": [
+             "infoConsumo"
+         ],
+         "matchers": {
+             "Event_count_texas_tot.eq": (id-1)
+         }
+     }
+     print(datajson)
+     r = interscityManager.getDynamicData(requestUuid, datajson)
+     if r.status_code == 200:
+        data = json.loads(r.text, object_hook=lambda d: namedtuple(
+            'X', d.keys())(*d.values()))
+        if data.resources == []:
+            print("Nenhum evento cadastrado nesta casa.")
+        else:
+
+            infoConsumoList = data.resources[0].capabilities.infoConsumo
+            for s in infoConsumoList:
+                return s
+

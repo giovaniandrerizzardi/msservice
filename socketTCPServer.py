@@ -77,14 +77,11 @@ def upaupa_servidor_tcp(n_eventos):
             #conn.send(data)  # echo
         conn.close()
        # files = open("conjuntoTeste.txt","a+")
-        dados = decoder.processData_decode(msg)
+        dados = decoder.processData_decode(msg, '')
         #files.write(str(msg))
         #files.write("FIMDOEVENTO")
         #files.close()
-        if dados.alerta == 'none':
-            model.add_event(dados.uuid, False)
-        else:
-            model.add_event(dados.uuid, True)
+        
        
         datajson = {
         "event_type": dados.Event,

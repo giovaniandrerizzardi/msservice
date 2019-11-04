@@ -123,7 +123,7 @@ def attdashboard():
     sec73 = isoFunctionalities.func73()
     sec75 = isoFunctionalities.func75()
     sec76 = isoFunctionalities.func76()
-   # sec77 = isoFunctionalities.func77('')
+    sec77 = isoFunctionalities.func77('')
     print(sec71)
     print(sec72)
     print(sec73)
@@ -141,23 +141,24 @@ def attdashboard():
     return response
 
 
-@app.route('/lastEvent', methods=['GET'])
+@app.route('/lastevent', methods=['GET'])
 def getLastEvent():
     args = request.args
     print(args['uuid'])
     requestedUuid = args['uuid']
     dados = interscityManager.getLastDataByUUID(requestedUuid)
+    
     datajson = {
         "event_type": dados.Event,
-        "energy_ativa": dados.energy_ativa,
-        "voltage_real_rms": dados.rmsVoltage_real,
-        "phase_real_rms": dados.rmsPhase_real,
+        "energy_ativa": round(dados.energy_ativa, 3),
+        "voltage_real_rms": round(dados.rmsVoltage_real,2),
+        "phase_real_rms": round(dados.rmsPhase_real,2),
         "alert_type": dados.alerta,
         #"timestamp": dados.
-        "total_energy_daily": interscityManager.getDataDaily(requestedUuid)
+        "total_energy_daily": round(interscityManager.getDataDaily(requestedUuid),5)
     }
-
-    return datajson
+    print(datajson)
+    return json.dumps(datajson)
 
 @app.route('/attdashboard', methods=['GET'])
 def attdashboardgraft():
@@ -214,6 +215,13 @@ def attdashboardgraft():
     return str(df.resample('M').sum())
 
 
+@app.route('/dashboard2', methods=['GET'])
+def attdashboard2():
+    
+    sec77 = isoFunctionalities.func77('')
+
+  
+    return 's'
 
 # Run the application
 app.run(debug=True, port= 4567)

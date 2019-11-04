@@ -1,1 +1,1900 @@
-[{"id":"48870716.089838","type":"ui_button","z":"b387989c.cddb48","name":"Buscar","group":"90a40ab3.640bd8","order":2,"width":0,"height":0,"passthru":false,"label":"Buscar","tooltip":"","color":"","bgcolor":"","icon":"","payload":"","payloadType":"str","topic":"","x":76,"y":1442,"wires":[["b028614c.3ac9f"]]},{"id":"c1b49093.f414d","type":"ui_chart","z":"b387989c.cddb48","name":"Corrente","group":"1a08f604.6204ca","order":2,"width":0,"height":0,"label":"Corrente","chartType":"line","legend":"false","xformat":"HH:mm:ss","interpolate":"linear","nodata":"Corrente","dot":false,"ymin":"0","ymax":"10","removeOlder":1,"removeOlderPoints":"","removeOlderUnit":"60","cutout":0,"useOneColor":false,"colors":["#1f77b4","#aec7e8","#ff7f0e","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5"],"useOldStyle":false,"outputs":1,"x":933.9999618530273,"y":701.9999523162842,"wires":[[]]},{"id":"737a21f5.206b9","type":"ui_chart","z":"b387989c.cddb48","name":"","group":"b89c4e64.a952b","order":2,"width":0,"height":0,"label":"Consumo Total","chartType":"line","legend":"false","xformat":"HH:mm:ss","interpolate":"linear","nodata":"Consumo Total","dot":false,"ymin":"0","ymax":"10","removeOlder":1,"removeOlderPoints":"","removeOlderUnit":"60","cutout":0,"useOneColor":false,"colors":["#1f77b4","#aec7e8","#ff7f0e","#2ca02c","#98df8a","#d62728","#ff9896","#9467bd","#c5b0d5"],"useOldStyle":false,"outputs":1,"x":954.5,"y":751.9999389648438,"wires":[[]]},{"id":"4823d6d.9528a28","type":"ui_text","z":"b387989c.cddb48","group":"1d8a117f.2066df","order":4,"width":0,"height":0,"name":"Evento","label":"Evento","format":"{{msg.payload.evento}}","layout":"row-spread","x":935.0000152587891,"y":808.9999008178711,"wires":[]},{"id":"61701e2d.af027","type":"function","z":"b387989c.cddb48","name":"Lastevento","func":"msg.payload.evento = msg.payload.event_type\nmsg.payload.energy_ativa = msg.payload.energy_ativa + \" kWh\"\nmsg.payload.voltage_real = msg.payload.voltage_real_rms + \" V\"\nmsg.payload.phase_real = msg.payload.phase_real_rms + \" A\"\nreturn msg;","outputs":1,"noerr":0,"x":695.0000457763672,"y":854.9999141693115,"wires":[["4823d6d.9528a28","50f2566a.af9d38","1fde005d.98c39","f5834f75.68fa5","e6b5044c.5b1858"]]},{"id":"50f2566a.af9d38","type":"ui_text","z":"b387989c.cddb48","group":"1d8a117f.2066df","order":4,"width":0,"height":0,"name":"Consumo","label":"Consumo","format":"{{msg.payload.energy_ativa}}","layout":"row-spread","x":933.5000152587891,"y":857.9999008178711,"wires":[]},{"id":"1fde005d.98c39","type":"ui_text","z":"b387989c.cddb48","group":"1d8a117f.2066df","order":4,"width":0,"height":0,"name":"Tensão","label":"Tensão","format":"{{msg.payload.voltage_real}}","layout":"row-spread","x":934.5000152587891,"y":906.9999008178711,"wires":[]},{"id":"f5834f75.68fa5","type":"ui_text","z":"b387989c.cddb48","group":"1d8a117f.2066df","order":4,"width":0,"height":0,"name":"Consumo","label":"Corrente","format":"{{msg.payload.phase_real}}","layout":"row-spread","x":939.5000152587891,"y":950.9999008178711,"wires":[]},{"id":"4d2df34f.9464ec","type":"function","z":"b387989c.cddb48","name":"Tensao ","func":"msg.payload.voltage_real = msg.payload.voltage_real_rms\nreturn msg;","outputs":1,"noerr":0,"x":687.9999771118164,"y":599.9999389648438,"wires":[["907ef652.0fad58"]]},{"id":"907ef652.0fad58","type":"ui_gauge","z":"b387989c.cddb48","name":"","group":"42c1e5d0.6d0ecc","order":4,"width":0,"height":0,"gtype":"gage","title":"Tensão","label":"V","format":"{{msg.payload.voltage_real}}","min":0,"max":"500","colors":["#00b500","#e6e600","#ca3838"],"seg1":"220","seg2":"240","x":929.4999618530273,"y":587.9999523162842,"wires":[]},{"id":"812aceb9.721f8","type":"function","z":"b387989c.cddb48","name":"Corrente","func":"msg.payload.phase_real_rms = msg.payload.phase_real_rms\nreturn msg;","outputs":1,"noerr":0,"x":682.4999542236328,"y":660.9999370574951,"wires":[["29794271.316ade","c1b49093.f414d"]]},{"id":"29794271.316ade","type":"ui_gauge","z":"b387989c.cddb48","name":"","group":"42c1e5d0.6d0ecc","order":4,"width":0,"height":0,"gtype":"gage","title":"Corrente","label":"A","format":"{{msg.payload.phase_real_rms}}","min":0,"max":"10","colors":["#00b500","#e6e600","#ca3838"],"seg1":"2","seg2":"5","x":931.4999618530273,"y":638.9999523162842,"wires":[]},{"id":"50b1d5b.ac8042c","type":"function","z":"b387989c.cddb48","name":"Consumo Total","func":"msg.payload = msg.payload.energy_ativa\nreturn msg;","outputs":1,"noerr":0,"x":702.5,"y":750.9999389648438,"wires":[["737a21f5.206b9"]]},{"id":"f04359b8.71ddf8","type":"http in","z":"b387989c.cddb48","name":"POST ultimo evento","url":"/attstatus","method":"post","upload":true,"swaggerDoc":"","x":136.7926025390625,"y":749.9999074935913,"wires":[["87547ea1.62107"]]},{"id":"87547ea1.62107","type":"function","z":"b387989c.cddb48","name":"tratativador","func":"return msg;","outputs":1,"noerr":0,"x":349.792667388916,"y":750.0482635498047,"wires":[["9a4e0a8f.e8d7b8","4d2df34f.9464ec","812aceb9.721f8","50b1d5b.ac8042c","61701e2d.af027"]]},{"id":"5adb8820.12b8b8","type":"debug","z":"b387989c.cddb48","name":"","active":true,"tosidebar":true,"console":true,"tostatus":false,"complete":"true","targetType":"full","x":1086,"y":1322,"wires":[]},{"id":"9a4e0a8f.e8d7b8","type":"http response","z":"b387989c.cddb48","name":"Return 200","statusCode":"200","headers":{},"x":696.7812805175781,"y":958.6760005950928,"wires":[]},{"id":"e6b5044c.5b1858","type":"ui_text","z":"b387989c.cddb48","group":"1d8a117f.2066df","order":4,"width":0,"height":0,"name":"Consumo Total Diário","label":"Consumo Total Diário","format":"{{msg.payload.total_energy_daily}}","layout":"row-spread","x":974.5142440795898,"y":996.0056533813477,"wires":[]},{"id":"ade1c5a2.880878","type":"ui_form","z":"b387989c.cddb48","name":"Dashboard Sign-In","label":"","group":"a5fb6ab.1e7b998","order":0,"width":0,"height":0,"options":[{"label":"username","value":"username","type":"text","required":true},{"label":"password","value":"password","type":"password","required":true}],"formValue":{"username":"","password":""},"payload":"","submit":"submit","cancel":"cancel","topic":"","x":119.5,"y":144.00000381469727,"wires":[["3835492.abde9b6","48d6e9ce.1f88a8"]]},{"id":"3835492.abde9b6","type":"function","z":"b387989c.cddb48","name":"Account Log","func":"var accountlog =  flow.get(\"accountlog\") || [] ; \n\naccountlog.push({ accessAt : new Date(), username : msg.payload.username})\n\nflow.set(\"accountlog\", accountlog);\n\nmsg.payload = accountlog;\nreturn msg;","outputs":1,"noerr":0,"x":320.50000762939453,"y":122,"wires":[["549cdf39.66aa6"]]},{"id":"48d6e9ce.1f88a8","type":"function","z":"b387989c.cddb48","name":"Account Verification","func":"var accounts =  flow.get(\"accounts\") || [ { username : \"admin\", password : \"admin\"},{ username : \"guest\", password : \"guest\"}] ; \n\nvar username = msg.payload.username ;\nvar password = msg.payload.password ; \n\nmsg.payload = 1;\n\naccounts.forEach(function ( account ){\n    if ( account.username == username ) {\n       msg.payload = 2;\n       if ( account.password == password ) {\n           msg.payload = 0;\n       } \n    }\n});\n\nif ( msg.payload == 0 ) {\n  var currentsocketid = flow.get(\"clientid\") || undefined;\n  if ( currentsocketid !== undefined && currentsocketid !== msg.socketid ) msg.payload = 3;\n}\n// keep the original socketid from msg.socketid;\nreturn msg;","outputs":1,"noerr":0,"x":333.5000457763672,"y":167.00000953674316,"wires":[["ba92a3e3.d3e36"]]},{"id":"ba92a3e3.d3e36","type":"switch","z":"b387989c.cddb48","name":"","property":"payload","propertyType":"msg","rules":[{"t":"eq","v":"0","vt":"str"},{"t":"eq","v":"1","vt":"str"},{"t":"eq","v":"2","vt":"str"},{"t":"eq","v":"3","vt":"str"}],"checkall":"true","repair":false,"outputs":4,"x":502.5000419616699,"y":197.99999237060547,"wires":[["7253bb00.bcbc84"],["78abd5c0.216d6c"],["78abd5c0.216d6c"],["1052e060.2ed43"]]},{"id":"7253bb00.bcbc84","type":"function","z":"b387989c.cddb48","name":"= 0 : Success","func":"/* activate session timer */\nvar sessionTimer =  flow.get(\"sessionTimer\") || 0; \nvar currTime = Date.now();\nflow.set(\"sessionTimer\", currTime);\nflow.set(\"clientid\", msg.socketid);\n/* ui-control payload */\nmsg.payload = { group: {\n    show : [\"GraficoUltimoEvento_Gráficos\",\n            \"GraficoUltimoEvento_corrente\",\n            \"GraficoUltimoEvento_corrente2\",\n            \"GraficoUltimoEvento_Ultimo_Evento\"],\n    hide : [\"GraficoUltimoEvento_login\"]\n    }\n};\n\nreturn msg;","outputs":1,"noerr":0,"x":680.4998779296875,"y":164,"wires":[["f3fa55aa.764b68"]]},{"id":"549cdf39.66aa6","type":"debug","z":"b387989c.cddb48","name":"Debug Account Log ","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"true","x":695.5001220703125,"y":79.0000114440918,"wires":[]},{"id":"f3fa55aa.764b68","type":"ui_ui_control","z":"b387989c.cddb48","name":"Go to UltiEvento Group","x":949.5000686645508,"y":153.99999809265137,"wires":[[]]},{"id":"78abd5c0.216d6c","type":"function","z":"b387989c.cddb48","name":"= 1 : Unknown User","func":"msg.payload = \"Credenciais não batem em nosso sistema!!\"\nreturn msg;","outputs":1,"noerr":0,"x":689.5,"y":202,"wires":[["4766b999.2791b8"]]},{"id":"4766b999.2791b8","type":"ui_toast","z":"b387989c.cddb48","position":"dialog","displayTime":"3","highlight":"","outputs":1,"ok":"OK","cancel":"","topic":"Authentication Failed","name":"Authentication Failure Dialog","x":962.5000610351562,"y":194,"wires":[[]]},{"id":"1052e060.2ed43","type":"function","z":"b387989c.cddb48","name":"= 4 : System In Use","func":"msg.payload = \"System is used by other user.\";\nreturn msg;","outputs":1,"noerr":0,"x":688.9444580078125,"y":249.12152099609375,"wires":[["8b8e57b9.e8bd68"]]},{"id":"8b8e57b9.e8bd68","type":"ui_toast","z":"b387989c.cddb48","position":"dialog","displayTime":"3","highlight":"","outputs":1,"ok":"OK","cancel":"","topic":"System In Use.","name":"System In-Use Dialog","x":944.6112670898438,"y":232.12152099609375,"wires":[[]]},{"id":"984d0c07.8b9f4","type":"comment","z":"b387989c.cddb48","name":"Login time","info":"","x":117,"y":71,"wires":[]},{"id":"3403be50.4dd4a2","type":"function","z":"b387989c.cddb48","name":"Detect Session Timer","func":"var sessionTimer =  flow.get(\"sessionTimer\") || 0; \nvar currTime = Date.now();\nvar SESSION_TIMEOUT = 15000; //15 secs\n\nif ( sessionTimer === 0 /* Inactive, No user signed in */ ) {\n    msg.payload = 2;\n} else {\n    if ( currTime - sessionTimer > SESSION_TIMEOUT ) {\n      msg.payload = 0;  \n    } else {\n      msg.payload = 1;        \n    }\n}\nreturn msg;","outputs":1,"noerr":0,"x":312.5,"y":363,"wires":[["2e0ed105.525bee"]]},{"id":"2e0ed105.525bee","type":"switch","z":"b387989c.cddb48","name":"","property":"payload","propertyType":"msg","rules":[{"t":"eq","v":"0","vt":"str"},{"t":"eq","v":"1","vt":"str"},{"t":"eq","v":"2","vt":"str"}],"checkall":"true","repair":false,"outputs":3,"x":482.5000343322754,"y":361,"wires":[["472630bb.0f7fc"],["7a6d67e4.8eaee8"],["3204b011.c7fb3"]]},{"id":"472630bb.0f7fc","type":"function","z":"b387989c.cddb48","name":"Time-Out","func":"/* activate session timer */\nvar sessionTimer =  flow.get(\"sessionTimer\") || 0; \nflow.set(\"sessionTimer\", 0);\n\nmsg.socketid = flow.get(\"clientid\") || undefined;\nmsg.payload = \"Session Expired! Please singin again!\";\nreturn msg;","outputs":1,"noerr":0,"x":638.4999465942383,"y":334.00000381469727,"wires":[["2598fa7d.2c61c6","5c963a6c.214864"]]},{"id":"5c963a6c.214864","type":"function","z":"b387989c.cddb48","name":"Sign-In Redirection","func":"var msg = {};\n\nmsg.socketid = flow.get(\"clientid\") || undefined;\nmsg.payload = { group: {\n    hide : [\"GraficoUltimoEvento_Gráficos\",\n            \"GraficoUltimoEvento_corrente\",\n            \"GraficoUltimoEvento_corrente2\",\n            \"GraficoUltimoEvento_Ultimo_Evento\"],\n    show : [\"GraficoUltimoEvento_login\"]\n}\n};\n\nflow.set(\"clientid\", undefined);\nreturn msg;","outputs":1,"noerr":0,"x":836.4999847412109,"y":337,"wires":[["adf157aa.516508"]]},{"id":"2598fa7d.2c61c6","type":"ui_toast","z":"b387989c.cddb48","position":"dialog","displayTime":"3","highlight":"","outputs":1,"ok":"OK","cancel":"","topic":"Session Timeout","name":"Time-Out Dialog","x":826.0000762939453,"y":300.00000381469727,"wires":[[]]},{"id":"adf157aa.516508","type":"ui_ui_control","z":"b387989c.cddb48","name":"Go to Login ","x":1012.9999942779541,"y":335.9999885559082,"wires":[[]]},{"id":"7a6d67e4.8eaee8","type":"function","z":"b387989c.cddb48","name":"Sensor/History Goup","func":"var msg = {};\nmsg.socketid = flow.get(\"clientid\") || undefined;\nmsg.payload = { group: {\n    show : [\"GraficoUltimoEvento_Gráficos\",\n            \"GraficoUltimoEvento_corrente\",\n            \"GraficoUltimoEvento_corrente2\",\n            \"GraficoUltimoEvento_Ultimo_Evento\"],\n    hide : [\"GraficoUltimoEvento_login\"]\n}\n};\nreturn msg;","outputs":1,"noerr":0,"x":679.9999923706055,"y":374.99999618530273,"wires":[["4015352f.d2c82c"]]},{"id":"4015352f.d2c82c","type":"ui_ui_control","z":"b387989c.cddb48","name":"Stay in GraficoUltimoEvento","x":1003.0000610351562,"y":374.99999809265137,"wires":[[]]},{"id":"3204b011.c7fb3","type":"function","z":"b387989c.cddb48","name":"Signin Goup","func":"var msg = {};\nmsg.payload = { group: {\n    hide : [\"GraficoUltimoEvento_Gráficos\",\n            \"GraficoUltimoEvento_corrente\",\n            \"GraficoUltimoEvento_corrente2\",\n            \"GraficoUltimoEvento_Ultimo_Evento\"],\n    show : [\"GraficoUltimoEvento_login\"]\n}\n};\nreturn msg;","outputs":1,"noerr":0,"x":651.0000534057617,"y":416.0000343322754,"wires":[["ba8f3591.828418"]]},{"id":"ba8f3591.828418","type":"ui_ui_control","z":"b387989c.cddb48","name":"Go to Login ","x":951.0002098083496,"y":413.0000343322754,"wires":[[]]},{"id":"5a85aba4.c24ee4","type":"inject","z":"b387989c.cddb48","name":"Timer","topic":"","payload":"","payloadType":"date","repeat":"3","crontab":"","once":false,"onceDelay":0.1,"x":124.49996948242188,"y":396.99998474121094,"wires":[["3403be50.4dd4a2","65ce310c.23f02"]]},{"id":"65ce310c.23f02","type":"function","z":"b387989c.cddb48","name":"Calculating Remaining Time (Debug)","func":"var sessionTimer =  flow.get(\"sessionTimer\") || 0; \nvar currTime = Date.now();\nvar remainingSecs = Math.floor((15000 - (currTime - sessionTimer))/1000) + 1;\n    \nif ( sessionTimer == 0 /* Inactive, No user signed in */ ) {\n    return null;\n} else {\n    \n    if ( remainingSecs <= 7 ) msg.payload = \"Remaining : \" + remainingSecs + \" secs\";  \n    else return null;\n}\n\nmsg.socketid = flow.get(\"clientid\") || \"B1234\";\nreturn msg;","outputs":1,"noerr":0,"x":362.49999237060547,"y":451.0000123977661,"wires":[["731e7299.38d09c"]]},{"id":"731e7299.38d09c","type":"ui_toast","z":"b387989c.cddb48","position":"bottom right","displayTime":"1","highlight":"","outputs":0,"ok":"OK","cancel":"","topic":"Timer","name":"Display Remaining Time","x":646.2221641540527,"y":450.99998474121094,"wires":[]},{"id":"e7f517e2.62c8e8","type":"http request","z":"b387989c.cddb48","name":"Authentication","method":"GET","ret":"txt","paytoqs":true,"url":"http://localhost:4567/auth","tls":"","proxy":"","authType":"","x":333,"y":65,"wires":[[]]},{"id":"e7f9e8e6.3d95b8","type":"comment","z":"b387989c.cddb48","name":"grafico de mes dinamico( NAO USADO)","info":"","x":906,"y":1659,"wires":[]},{"id":"4d1940a.b604cc","type":"ui_date_picker","z":"b387989c.cddb48","name":"Selecione  data FROM","label":"date From","group":"90a40ab3.640bd8","order":0,"width":0,"height":0,"passthru":false,"topic":"start","x":116,"y":1502,"wires":[["f44feb94.dd2e98"]]},{"id":"3a284db2.c65942","type":"ui_date_picker","z":"b387989c.cddb48","name":"Selecione  data TOO","label":"date TO","group":"48ff4e01.7973","order":0,"width":0,"height":0,"passthru":false,"topic":"end","x":117.5,"y":1545,"wires":[["a26de1b0.b7cd4"]]},{"id":"4628d6f2.5bf798","type":"function","z":"b387989c.cddb48","name":"","func":"msg.payload = { group: {\n    show : [\"GraficosDefault_GraficoPara\"]\n    }\n};\nreturn msg;","outputs":1,"noerr":0,"x":846,"y":1762,"wires":[["8d0e3be2.902f28"]]},{"id":"8d0e3be2.902f28","type":"ui_ui_control","z":"b387989c.cddb48","name":"libera o datapicker TOO","x":1021.5,"y":1762,"wires":[[]]},{"id":"17c869ba.c5f9c6","type":"inject","z":"b387989c.cddb48","name":"","topic":"","payload":"","payloadType":"date","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":827,"y":1699,"wires":[["ed6b22ef.6d108"]]},{"id":"ed6b22ef.6d108","type":"function","z":"b387989c.cddb48","name":"","func":"var msg = {};\n\nflow.set(\"dateFrom\", '');\nflow.set(\"dateTo\", '');\nmsg.socketid = flow.get(\"clientid\") || undefined;\nmsg.payload = { group: {\n    hide : [\"GraficosDefault_GraficoPara\"]\n    }\n};\nreturn msg;","outputs":1,"noerr":0,"x":1042.5,"y":1697,"wires":[["26b941b9.0e35be"]]},{"id":"26b941b9.0e35be","type":"ui_ui_control","z":"b387989c.cddb48","name":"Tranca o datapicker To","x":1234,"y":1695,"wires":[[]]},{"id":"58c98926.de5598","type":"http request","z":"b387989c.cddb48","name":"Busca as infos","method":"GET","ret":"txt","paytoqs":true,"url":"http://127.0.0.1:4567/attdashboard","tls":"","proxy":"","authType":"","x":1076,"y":1262,"wires":[["91ac90e.479157"]]},{"id":"37bcd294.608d6e","type":"ui_toast","z":"b387989c.cddb48","position":"dialog","displayTime":"3","highlight":"","outputs":1,"ok":"OK","cancel":"","topic":"Authentication Failed","name":"Authentication Failure Dialog","x":1176,"y":1442,"wires":[[]]},{"id":"40e89c5f.faf814","type":"function","z":"b387989c.cddb48","name":"Data invalida","func":"\nmsg.payload = 'EERRRRROU'\nreturn msg;","outputs":1,"noerr":0,"x":946,"y":1442,"wires":[["37bcd294.608d6e"]]},{"id":"629f6e2c.33974","type":"ui_ui_control","z":"b387989c.cddb48","name":"uiControl","x":96,"y":1662,"wires":[["143bf06d.83ea8"]]},{"id":"143bf06d.83ea8","type":"function","z":"b387989c.cddb48","name":"initFlowVariables","func":"\nnode.log('inicializando varivaveis');\n\nvar startInput = \"\";\nvar endInput = \"\";\nvar uuid = \"9c0772b8-c809-4865-bec7-70dd2013bc37\"\n\nflow.set(\"startInput\", startInput);\nflow.set(\"endInput\", endInput);\n//necessario pegar o uuid do cara logado. Por enquanto usa esse ai mesmo\nflow.set(\"uuid\", uuid);\n\n\nreturn msg;","outputs":1,"noerr":0,"x":286,"y":1662,"wires":[["c123d76f.4dc118"]]},{"id":"c123d76f.4dc118","type":"debug","z":"b387989c.cddb48","name":"InitVar","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","x":486,"y":1662,"wires":[]},{"id":"211679e8.fb5226","type":"function","z":"b387989c.cddb48","name":"setStartDate","func":"var startInput = flow.get('startInput') || \"\";\nflow.set('startInput', msg.payload);\n\nmsg.payload = flow.get('startInput');\n\nreturn msg;","outputs":1,"noerr":0,"x":546,"y":1502,"wires":[["7c872395.dfe01c"]]},{"id":"973f32ee.7e99c","type":"function","z":"b387989c.cddb48","name":"setEndDate","func":"var endInput = flow.get('endInput') || \"\";\nflow.set(\"endInput\", msg.payload);\n\nmsg.payload = flow.get('endInput');\nreturn msg;","outputs":1,"noerr":0,"x":546,"y":1542,"wires":[["7c872395.dfe01c"]]},{"id":"7c872395.dfe01c","type":"debug","z":"b387989c.cddb48","name":"Dates","active":false,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","x":726,"y":1522,"wires":[]},{"id":"695a3106.5b514","type":"comment","z":"b387989c.cddb48","name":"inicia as variaveis de ambiente","info":"","x":166,"y":1622,"wires":[]},{"id":"b028614c.3ac9f","type":"function","z":"b387989c.cddb48","name":"concatDates","func":"// CONCAT DATE AND TIME\nvar startDate = flow.get('startInput').substring(0, 10) || \"\";\nvar endDate = flow.get('endInput').substring(0, 10) ||\"\";\n\nvar newStartDateTime = startDate + \" \";\nvar newEndDateTime = endDate + \" \";\n\nflow.set('startInput', newStartDateTime + \"00:00:00\");\nflow.set('endInput', newEndDateTime + \"23:59:59\");\n\n//DEBUG\nmsg.payload = flow.get('startInput');\n\nreturn msg;","outputs":1,"noerr":0,"x":246,"y":1442,"wires":[["8e0f2aaf.6c1db8"]]},{"id":"8e0f2aaf.6c1db8","type":"function","z":"b387989c.cddb48","name":"validateDates","func":"// CHECK IF DATES ARE OK\nvar startInput = flow.get('startInput');\nvar endInput = flow.get('endInput');\n\nvar startTimestampDate = new Date(startInput).getTime();\nvar endTimestampDate = new Date(endInput).getTime();\n\nif (startTimestampDate < endTimestampDate)\n    msg.payload = \"OK\";\nif (startTimestampDate >= endTimestampDate)\n    msg.payload = \"KO\";\n\nreturn msg;\n","outputs":1,"noerr":0,"x":436,"y":1442,"wires":[["8cbf8be.cae7478"]]},{"id":"8cbf8be.cae7478","type":"switch","z":"b387989c.cddb48","name":"validateVariables","property":"payload","propertyType":"msg","rules":[{"t":"eq","v":"OK","vt":"str"},{"t":"eq","v":"KO","vt":"str"}],"checkall":"true","repair":false,"outputs":2,"x":686,"y":1442,"wires":[["8779205c.375ee"],["40e89c5f.faf814"]],"outputLabels":["msg.payload","msg.payload"]},{"id":"8779205c.375ee","type":"function","z":"b387989c.cddb48","name":"getFlowVariables","func":"\nvar startInput = flow.get('startInput');\nvar endInput = flow.get('endInput');\nvar uuid = flow.get('uuid');\n\nvar payload = {\"uuid\": uuid, \"start\": startInput,\"end\": endInput};\nnode.log(typeof data);\n//msg.payload = JSON.stringify(data);\n//msg.payload.startInput = startInput;\n//msg.payload.endInput = endInput;\nmsg.payload = payload;\nreturn msg;","outputs":1,"noerr":0,"x":846,"y":1322,"wires":[["5adb8820.12b8b8","58c98926.de5598"]]},{"id":"91ac90e.479157","type":"debug","z":"b387989c.cddb48","name":"","active":true,"tosidebar":true,"console":true,"tostatus":false,"complete":"true","targetType":"full","x":1306,"y":1262,"wires":[]},{"id":"89b01410.1dc4b8","type":"comment","z":"b387989c.cddb48","name":"prepara o payload e envia. 1 deles funciona","info":"","x":806,"y":1282,"wires":[]},{"id":"f44feb94.dd2e98","type":"moment","z":"b387989c.cddb48","name":"timestampToStartDate","topic":"","input":"payload","inputType":"msg","inTz":"Europe/London","adjAmount":0,"adjType":"days","adjDir":"add","format":"YYYY-MM-DD","locale":"C","output":"payload","outputType":"msg","outTz":"Europe/London","x":336,"y":1502,"wires":[["211679e8.fb5226"]]},{"id":"a26de1b0.b7cd4","type":"moment","z":"b387989c.cddb48","name":"timestampToEndDate","topic":"","input":"payload","inputType":"msg","inTz":"Europe/London","adjAmount":0,"adjType":"days","adjDir":"add","format":"YYYY-MM-DD","locale":"C","output":"payload","outputType":"msg","outTz":"Europe/London","x":336,"y":1542,"wires":[["973f32ee.7e99c"]]},{"id":"90a40ab3.640bd8","type":"ui_group","z":"","name":"GraficoDe","tab":"2c6de81.c947f18","disp":true,"width":"6","collapse":false},{"id":"1a08f604.6204ca","type":"ui_group","z":"","name":"corrente","tab":"c0e93715.e01bd8","order":3,"disp":true,"width":"6","collapse":false},{"id":"b89c4e64.a952b","type":"ui_group","z":"","name":"corrente2","tab":"c0e93715.e01bd8","order":4,"disp":true,"width":"6","collapse":false},{"id":"1d8a117f.2066df","type":"ui_group","z":"","name":"Ultimo Evento","tab":"c0e93715.e01bd8","order":5,"disp":true,"width":"6","collapse":false},{"id":"42c1e5d0.6d0ecc","type":"ui_group","z":"","name":"Gráficos","tab":"c0e93715.e01bd8","order":2,"disp":true,"width":"6","collapse":false},{"id":"a5fb6ab.1e7b998","type":"ui_group","z":"","name":"login","tab":"c0e93715.e01bd8","disp":true,"width":"6","collapse":false},{"id":"48ff4e01.7973","type":"ui_group","z":"","name":"GraficoPara","tab":"2c6de81.c947f18","disp":true,"width":"6","collapse":false},{"id":"2c6de81.c947f18","type":"ui_tab","z":"","name":"GraficosDefault","icon":"dashboard","disabled":false,"hidden":false},{"id":"c0e93715.e01bd8","type":"ui_tab","z":"","name":"GraficoUltimoEvento","icon":"dashboard","disabled":false,"hidden":false}]
+[
+    {
+        "id": "6a456306.42078c",
+        "type": "inject",
+        "z": "dc2d0fc7.ab66f",
+        "name": "injetorrr",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "",
+        "x": 86.5,
+        "y": 650,
+        "wires": [
+            [
+                "9a7b270a.61c398"
+            ]
+        ]
+    },
+    {
+        "id": "2314219f.5db1ee",
+        "type": "ui_button",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Buscar",
+        "group": "6e234efd.43c4d",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "Buscar",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "",
+        "payloadType": "str",
+        "topic": "",
+        "x": 225,
+        "y": 1397,
+        "wires": [
+            [
+                "d933a54b.a94a08"
+            ]
+        ]
+    },
+    {
+        "id": "dea9b354.302b",
+        "type": "ui_chart",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Corrente",
+        "group": "bff1ed6c.fb267",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Corrente",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Corrente",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 1082.9999618530273,
+        "y": 656.9999523162842,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9d11be9.d01e74",
+        "type": "ui_chart",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Consumo Total",
+        "group": "6f685b7e.05b7f4",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "Consumo Total",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "Consumo Total",
+        "dot": false,
+        "ymin": "0",
+        "ymax": "10",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "60",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 1103.5,
+        "y": 706.9999389648438,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "792dfd5d.314eb4",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "9572188c.421b78",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Evento",
+        "label": "Evento",
+        "format": "{{msg.payload.evento}}",
+        "layout": "row-spread",
+        "x": 1084.000015258789,
+        "y": 763.9999008178711,
+        "wires": []
+    },
+    {
+        "id": "8f5cddff.b0a97",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Lastevento",
+        "func": "msg.payload.evento = msg.payload.event_type\nmsg.payload.energy_ativa = msg.payload.energy_ativa + \" kWh\"\nmsg.payload.voltage_real = msg.payload.voltage_real_rms + \" V\"\nmsg.payload.phase_real = msg.payload.phase_real_rms + \" A\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 844.0000457763672,
+        "y": 809.9999141693115,
+        "wires": [
+            [
+                "792dfd5d.314eb4",
+                "5d609356.c6313c",
+                "d0941605.7fcf28",
+                "2038df5c.7800a",
+                "720714b7.e4847c"
+            ]
+        ]
+    },
+    {
+        "id": "5d609356.c6313c",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "9572188c.421b78",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Consumo",
+        "label": "Consumo",
+        "format": "{{msg.payload.energy_ativa}}",
+        "layout": "row-spread",
+        "x": 1082.500015258789,
+        "y": 812.9999008178711,
+        "wires": []
+    },
+    {
+        "id": "d0941605.7fcf28",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "9572188c.421b78",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Tensão",
+        "label": "Tensão",
+        "format": "{{msg.payload.voltage_real}}",
+        "layout": "row-spread",
+        "x": 1083.500015258789,
+        "y": 861.9999008178711,
+        "wires": []
+    },
+    {
+        "id": "2038df5c.7800a",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "9572188c.421b78",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Consumo",
+        "label": "Corrente",
+        "format": "{{msg.payload.phase_real}}",
+        "layout": "row-spread",
+        "x": 1088.500015258789,
+        "y": 905.9999008178711,
+        "wires": []
+    },
+    {
+        "id": "276c47b0.5a8108",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Tensao ",
+        "func": "msg.payload.voltage_real = msg.payload.voltage_real_rms\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 836.9999771118164,
+        "y": 554.9999389648438,
+        "wires": [
+            [
+                "135eec29.019004"
+            ]
+        ]
+    },
+    {
+        "id": "135eec29.019004",
+        "type": "ui_gauge",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "group": "b29a1c91.4daa7",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Tensão",
+        "label": "V",
+        "format": "{{msg.payload.voltage_real}}",
+        "min": 0,
+        "max": "500",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "220",
+        "seg2": "240",
+        "x": 1078.4999618530273,
+        "y": 542.9999523162842,
+        "wires": []
+    },
+    {
+        "id": "90b20b49.70c398",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Corrente",
+        "func": "msg.payload.phase_real_rms = msg.payload.phase_real_rms\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 831.4999542236328,
+        "y": 615.9999370574951,
+        "wires": [
+            [
+                "d5c1c6ac.84fe68",
+                "dea9b354.302b"
+            ]
+        ]
+    },
+    {
+        "id": "d5c1c6ac.84fe68",
+        "type": "ui_gauge",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "group": "b29a1c91.4daa7",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Corrente",
+        "label": "A",
+        "format": "{{msg.payload.phase_real_rms}}",
+        "min": 0,
+        "max": "10",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "2",
+        "seg2": "5",
+        "x": 1080.4999618530273,
+        "y": 593.9999523162842,
+        "wires": []
+    },
+    {
+        "id": "c6c39707.9a2d38",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Consumo Total",
+        "func": "msg.payload = msg.payload.energy_ativa\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 851.5,
+        "y": 705.9999389648438,
+        "wires": [
+            [
+                "9d11be9.d01e74"
+            ]
+        ]
+    },
+    {
+        "id": "22ba3464.4e1ebc",
+        "type": "http in",
+        "z": "dc2d0fc7.ab66f",
+        "name": "POST ultimo evento",
+        "url": "/attstatus",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 115.7926025390625,
+        "y": 592.9998779296875,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b9117e0.c5fbf8",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "tratativador",
+        "func": "return msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 593.7926635742188,
+        "y": 708.0482788085938,
+        "wires": [
+            [
+                "e8ed7044.9180b",
+                "276c47b0.5a8108",
+                "90b20b49.70c398",
+                "c6c39707.9a2d38",
+                "8f5cddff.b0a97"
+            ]
+        ]
+    },
+    {
+        "id": "c14135d1.12c4b8",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1235,
+        "y": 1277,
+        "wires": []
+    },
+    {
+        "id": "e8ed7044.9180b",
+        "type": "http response",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Return 200",
+        "statusCode": "200",
+        "headers": {},
+        "x": 845.7812805175781,
+        "y": 913.6760005950928,
+        "wires": []
+    },
+    {
+        "id": "720714b7.e4847c",
+        "type": "ui_text",
+        "z": "dc2d0fc7.ab66f",
+        "group": "9572188c.421b78",
+        "order": 4,
+        "width": 0,
+        "height": 0,
+        "name": "Consumo Total Diário",
+        "label": "Consumo Total Diário",
+        "format": "{{msg.payload.total_energy_daily}}",
+        "layout": "row-spread",
+        "x": 1123.5142440795898,
+        "y": 951.0056533813477,
+        "wires": []
+    },
+    {
+        "id": "d5dd951d.b337b8",
+        "type": "ui_form",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Dashboard Sign-In",
+        "label": "",
+        "group": "1f6404d.3ab8cfb",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "options": [
+            {
+                "label": "uuid",
+                "value": "username",
+                "type": "text",
+                "required": true
+            },
+            {
+                "label": "password",
+                "value": "password",
+                "type": "password",
+                "required": true
+            }
+        ],
+        "formValue": {
+            "username": "",
+            "password": ""
+        },
+        "payload": "",
+        "submit": "submit",
+        "cancel": "cancel",
+        "topic": "",
+        "x": 268.5,
+        "y": 99.00000381469727,
+        "wires": [
+            [
+                "37082247.9ff53e",
+                "59803977.527e58"
+            ]
+        ]
+    },
+    {
+        "id": "37082247.9ff53e",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Account Log",
+        "func": "var accountlog =  flow.get(\"accountlog\") || [] ; \n\naccountlog.push({ accessAt : new Date(), username : msg.payload.username})\n\nflow.set(\"accountlog\", accountlog);\n\nmsg.payload = accountlog;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 469.50000762939453,
+        "y": 77,
+        "wires": [
+            [
+                "4b8656cb.23b058"
+            ]
+        ]
+    },
+    {
+        "id": "59803977.527e58",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Account Verification",
+        "func": "var accounts =  flow.get(\"accounts\") || [ { username : \"admin\", password : \"admin\"},{ username : \"guest\", password : \"guest\"}] ; \n\nvar username = msg.payload.username ;\nvar password = msg.payload.password ; \n\nmsg.payload = 1;\n\naccounts.forEach(function ( account ){\n    if ( account.username == username ) {\n       msg.payload = 2;\n       if ( account.password == password ) {\n           msg.payload = 0;\n       } \n    }\n});\n\nif ( msg.payload == 0 ) {\n  var currentsocketid = flow.get(\"clientid\") || undefined;\n  if ( currentsocketid !== undefined && currentsocketid !== msg.socketid ) msg.payload = 3;\n}\nif(username === \"admin\"){\n    msg.uuid = \"407da65d-712a-4a8a-b3ca-6eb8e8881374\"\n}else{\n    msg.uuid = username;\n}\n// keep the original socketid from msg.socketid;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 482.5000457763672,
+        "y": 122.00000953674316,
+        "wires": [
+            [
+                "76ed7231.53cf2c"
+            ]
+        ]
+    },
+    {
+        "id": "76ed7231.53cf2c",
+        "type": "switch",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 651.5000419616699,
+        "y": 152.99999237060547,
+        "wires": [
+            [
+                "585ca8ef.0b8b58"
+            ],
+            [
+                "2a73a0c.a2f066"
+            ],
+            [
+                "2a73a0c.a2f066"
+            ],
+            [
+                "14f1911e.511ddf"
+            ]
+        ]
+    },
+    {
+        "id": "585ca8ef.0b8b58",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "= 0 : Success",
+        "func": "/* activate session timer */\nvar sessionTimer =  flow.get(\"sessionTimer\") || 0; \nvar currTime = Date.now();\nflow.set(\"sessionTimer\", currTime);\nflow.set(\"clientid\", msg.socketid);\nflow.set(\"uuid\", msg.uuid);\n/* ui-control payload */\nmsg.payload = { group: {\n    show : [\"GraficoUltimoEvento_Gráficos\",\n            \"GraficoUltimoEvento_corrente\",\n            \"GraficoUltimoEvento_corrente2\",\n            \"GraficoUltimoEvento_Ultimo_Evento\",\n            \"GraficosDefault_GraficoDe\",\n            \"GraficosDefault_GraficoPara\"],\n    hide : [\"GraficoUltimoEvento_login\"]\n    }\n};\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 829.4998779296875,
+        "y": 119,
+        "wires": [
+            [
+                "4cf3a4bf.05b31c"
+            ]
+        ]
+    },
+    {
+        "id": "4b8656cb.23b058",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Debug Account Log ",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "x": 844.5001220703125,
+        "y": 34.0000114440918,
+        "wires": []
+    },
+    {
+        "id": "4cf3a4bf.05b31c",
+        "type": "ui_ui_control",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Go to UltiEvento Group",
+        "x": 1098.5000686645508,
+        "y": 108.99999809265137,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2a73a0c.a2f066",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "= 1 : Unknown User",
+        "func": "msg.payload = \"Credenciais não batem em nosso sistema!!\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 838.5,
+        "y": 157,
+        "wires": [
+            [
+                "98e5e1ad.c9ca8"
+            ]
+        ]
+    },
+    {
+        "id": "98e5e1ad.c9ca8",
+        "type": "ui_toast",
+        "z": "dc2d0fc7.ab66f",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "topic": "Authentication Failed",
+        "name": "Authentication Failure Dialog",
+        "x": 1111.5000610351562,
+        "y": 149,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "14f1911e.511ddf",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "= 4 : System In Use",
+        "func": "msg.payload = \"System is used by other user.\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 837.9444580078125,
+        "y": 204.12152099609375,
+        "wires": [
+            [
+                "e17af4da.fc09c8"
+            ]
+        ]
+    },
+    {
+        "id": "e17af4da.fc09c8",
+        "type": "ui_toast",
+        "z": "dc2d0fc7.ab66f",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "topic": "System In Use.",
+        "name": "System In-Use Dialog",
+        "x": 1093.6112670898438,
+        "y": 187.12152099609375,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "84d04ae3.31db68",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Login time",
+        "info": "",
+        "x": 266,
+        "y": 26,
+        "wires": []
+    },
+    {
+        "id": "f037212b.4b24a",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Detect Session Timer",
+        "func": "var sessionTimer =  flow.get(\"sessionTimer\") || 0; \nvar currTime = Date.now();\nvar SESSION_TIMEOUT = 150000; //15 secs\n\nif ( sessionTimer === 0 /* Inactive, No user signed in */ ) {\n    msg.payload = 2;\n} else {\n    if ( currTime - sessionTimer > SESSION_TIMEOUT ) {\n      msg.payload = 0;  \n    } else {\n      msg.payload = 1;        \n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 461.5,
+        "y": 318,
+        "wires": [
+            [
+                "7fa0ec17.0fda34"
+            ]
+        ]
+    },
+    {
+        "id": "7fa0ec17.0fda34",
+        "type": "switch",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 631.5000343322754,
+        "y": 316,
+        "wires": [
+            [
+                "32dcfd7b.641222"
+            ],
+            [
+                "801f2cfd.c5a91"
+            ],
+            [
+                "205a822c.c598ae"
+            ]
+        ]
+    },
+    {
+        "id": "32dcfd7b.641222",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Time-Out",
+        "func": "/* activate session timer */\nvar sessionTimer =  flow.get(\"sessionTimer\") || 0; \nflow.set(\"sessionTimer\", 0);\n\nmsg.socketid = flow.get(\"clientid\") || undefined;\nmsg.payload = \"Session Expired! Please singin again!\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 787.4999465942383,
+        "y": 289.00000381469727,
+        "wires": [
+            [
+                "11783903.9e3af7",
+                "a2f355df.7bd0a8"
+            ]
+        ]
+    },
+    {
+        "id": "a2f355df.7bd0a8",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Sign-In Redirection",
+        "func": "var msg = {};\n\nmsg.socketid = flow.get(\"clientid\") || undefined;\nmsg.payload = { group: {\n    hide : [\"GraficoUltimoEvento_Gráficos\",\n            \"GraficoUltimoEvento_corrente\",\n            \"GraficoUltimoEvento_corrente2\",\n            \"GraficoUltimoEvento_Ultimo_Evento\",\n            \"GraficosDefault_GraficoDe\",\n            \"GraficosDefault_GraficoPara\"],\n    show : [\"GraficoUltimoEvento_login\"]\n}\n};\n\n\nflow.set(\"clientid\", undefined);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 985.4999847412109,
+        "y": 292,
+        "wires": [
+            [
+                "efc58eb8.adb1b"
+            ]
+        ]
+    },
+    {
+        "id": "11783903.9e3af7",
+        "type": "ui_toast",
+        "z": "dc2d0fc7.ab66f",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "topic": "Session Timeout",
+        "name": "Time-Out Dialog",
+        "x": 975.0000762939453,
+        "y": 255.00000381469727,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "efc58eb8.adb1b",
+        "type": "ui_ui_control",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Go to Login ",
+        "x": 1161.999994277954,
+        "y": 290.9999885559082,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "801f2cfd.c5a91",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Sensor/History Goup",
+        "func": "var msg = {};\nmsg.socketid = flow.get(\"clientid\") || undefined;\nmsg.payload = { group: {\n    show : [\"GraficoUltimoEvento_Gráficos\",\n            \"GraficoUltimoEvento_corrente\",\n            \"GraficoUltimoEvento_corrente2\",\n            \"GraficoUltimoEvento_Ultimo_Evento\"],\n    hide : [\"GraficoUltimoEvento_login\"]\n}\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 828.9999923706055,
+        "y": 329.99999618530273,
+        "wires": [
+            [
+                "b5b74db5.25f92"
+            ]
+        ]
+    },
+    {
+        "id": "b5b74db5.25f92",
+        "type": "ui_ui_control",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Stay in GraficoUltimoEvento",
+        "x": 1152.0000610351562,
+        "y": 329.99999809265137,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "205a822c.c598ae",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Signin Goup",
+        "func": "var msg = {};\nmsg.payload = { group: {\n    hide : [\"GraficoUltimoEvento_Gráficos\",\n            \"GraficoUltimoEvento_corrente\",\n            \"GraficoUltimoEvento_corrente2\",\n            \"GraficoUltimoEvento_Ultimo_Evento\",\n            \"GraficosDefault_GraficoDe\",\n            \"GraficosDefault_GraficoPara\"],\n    show : [\"GraficoUltimoEvento_login\"]\n}\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 809.0000610351562,
+        "y": 370.0000305175781,
+        "wires": [
+            [
+                "e95e6cf9.7e74c"
+            ]
+        ]
+    },
+    {
+        "id": "e95e6cf9.7e74c",
+        "type": "ui_ui_control",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Go to Login ",
+        "x": 1100.0002098083496,
+        "y": 368.0000343322754,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "60184d52.d97624",
+        "type": "inject",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Timer",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "3",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 273.4999694824219,
+        "y": 351.99998474121094,
+        "wires": [
+            [
+                "f037212b.4b24a",
+                "891a0601.2fac18"
+            ]
+        ]
+    },
+    {
+        "id": "891a0601.2fac18",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Calculating Remaining Time (Debug)",
+        "func": "var sessionTimer =  flow.get(\"sessionTimer\") || 0; \nvar currTime = Date.now();\nvar remainingSecs = Math.floor((15000 - (currTime - sessionTimer))/1000) + 1;\n    \nif ( sessionTimer == 0 /* Inactive, No user signed in */ ) {\n    return null;\n} else {\n    \n    if ( remainingSecs <= 7 ) msg.payload = \"Remaining : \" + remainingSecs + \" secs\";  \n    else return null;\n}\n\nmsg.socketid = flow.get(\"clientid\") || \"B1234\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 511.49999237060547,
+        "y": 406.0000123977661,
+        "wires": [
+            [
+                "5ede2770.595308"
+            ]
+        ]
+    },
+    {
+        "id": "5ede2770.595308",
+        "type": "ui_toast",
+        "z": "dc2d0fc7.ab66f",
+        "position": "bottom right",
+        "displayTime": "1",
+        "highlight": "",
+        "outputs": 0,
+        "ok": "OK",
+        "cancel": "",
+        "topic": "Timer",
+        "name": "Display Remaining Time",
+        "x": 795.2221641540527,
+        "y": 405.99998474121094,
+        "wires": []
+    },
+    {
+        "id": "7969935d.e249ec",
+        "type": "http request",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Authentication",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": true,
+        "url": "http://localhost:4567/auth",
+        "tls": "",
+        "proxy": "",
+        "authType": "",
+        "x": 482,
+        "y": 20,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a8406920.475d68",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "grafico de mes dinamico( NAO USADO)",
+        "info": "",
+        "x": 1055,
+        "y": 1614,
+        "wires": []
+    },
+    {
+        "id": "24eeb7ec.695b68",
+        "type": "ui_date_picker",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Selecione  data FROM",
+        "label": "date From",
+        "group": "6e234efd.43c4d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "topic": "start",
+        "x": 265,
+        "y": 1457,
+        "wires": [
+            [
+                "8ac86e2d.eb56e"
+            ]
+        ]
+    },
+    {
+        "id": "1a6bcf2e.704331",
+        "type": "ui_date_picker",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Selecione  data TOO",
+        "label": "date TO",
+        "group": "8aa46274.0629d",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "topic": "end",
+        "x": 266.5,
+        "y": 1500,
+        "wires": [
+            [
+                "c4a02099.de10b"
+            ]
+        ]
+    },
+    {
+        "id": "ce0c7d.9609e38",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "func": "msg.payload = { group: {\n    show : [\"GraficosDefault_GraficoPara\"]\n    }\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 995,
+        "y": 1717,
+        "wires": [
+            [
+                "99047307.aa759"
+            ]
+        ]
+    },
+    {
+        "id": "99047307.aa759",
+        "type": "ui_ui_control",
+        "z": "dc2d0fc7.ab66f",
+        "name": "libera o datapicker TOO",
+        "x": 1170.5,
+        "y": 1717,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "194d4501.f5a02b",
+        "type": "inject",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 976,
+        "y": 1654,
+        "wires": [
+            [
+                "8835dc11.711e8"
+            ]
+        ]
+    },
+    {
+        "id": "8835dc11.711e8",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "func": "var msg = {};\n\nflow.set(\"dateFrom\", '');\nflow.set(\"dateTo\", '');\nmsg.socketid = flow.get(\"clientid\") || undefined;\nmsg.payload = { group: {\n    hide : [\"GraficosDefault_GraficoPara\"]\n    }\n};\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1184.5,
+        "y": 1673,
+        "wires": [
+            [
+                "2310d565.acf8fa"
+            ]
+        ]
+    },
+    {
+        "id": "2310d565.acf8fa",
+        "type": "ui_ui_control",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Tranca o datapicker To",
+        "x": 1383,
+        "y": 1650,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2da5530d.d27a6c",
+        "type": "http request",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Busca as infos",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": true,
+        "url": "http://127.0.0.1:4567/attdashboard",
+        "tls": "",
+        "proxy": "",
+        "authType": "",
+        "x": 1240,
+        "y": 1224,
+        "wires": [
+            [
+                "9eca7d7a.cefb6"
+            ]
+        ]
+    },
+    {
+        "id": "29622e50.85fcb2",
+        "type": "ui_toast",
+        "z": "dc2d0fc7.ab66f",
+        "position": "dialog",
+        "displayTime": "3",
+        "highlight": "",
+        "outputs": 1,
+        "ok": "OK",
+        "cancel": "",
+        "topic": "Authentication Failed",
+        "name": "Authentication Failure Dialog",
+        "x": 1325,
+        "y": 1397,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "56d890a4.e9068",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Data invalida",
+        "func": "\nmsg.payload = 'EERRRRROU'\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1095,
+        "y": 1397,
+        "wires": [
+            [
+                "29622e50.85fcb2"
+            ]
+        ]
+    },
+    {
+        "id": "f4dc5b16.d8d808",
+        "type": "ui_ui_control",
+        "z": "dc2d0fc7.ab66f",
+        "name": "uiControl",
+        "x": 245,
+        "y": 1617,
+        "wires": [
+            [
+                "39c50738.497668"
+            ]
+        ]
+    },
+    {
+        "id": "39c50738.497668",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "initFlowVariables",
+        "func": "\nnode.log('inicializando varivaveis');\n\nvar startInput = \"\";\nvar endInput = \"\";\nvar uuid = \"407da65d-712a-4a8a-b3ca-6eb8e8881374\"\n\nflow.set(\"startInput\", startInput);\nflow.set(\"endInput\", endInput);\n//necessario pegar o uuid do cara logado. Por enquanto usa esse ai mesmo\nflow.set(\"uuid\", uuid);\n\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 435,
+        "y": 1617,
+        "wires": [
+            [
+                "5c33f522.f96b0c"
+            ]
+        ]
+    },
+    {
+        "id": "5c33f522.f96b0c",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "InitVar",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 646,
+        "y": 1607,
+        "wires": []
+    },
+    {
+        "id": "61b41209.23f1cc",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "setStartDate",
+        "func": "var startInput = flow.get('startInput') || \"\";\nflow.set('startInput', msg.payload);\n\nmsg.payload = flow.get('startInput');\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 695,
+        "y": 1457,
+        "wires": [
+            [
+                "f872a1d8.72545"
+            ]
+        ]
+    },
+    {
+        "id": "75f3da91.7252e4",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "setEndDate",
+        "func": "var endInput = flow.get('endInput') || \"\";\nflow.set(\"endInput\", msg.payload);\n\nmsg.payload = flow.get('endInput');\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 695,
+        "y": 1497,
+        "wires": [
+            [
+                "f872a1d8.72545"
+            ]
+        ]
+    },
+    {
+        "id": "f872a1d8.72545",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Dates",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "x": 875,
+        "y": 1477,
+        "wires": []
+    },
+    {
+        "id": "84800412.7df338",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "inicia as variaveis de ambiente",
+        "info": "",
+        "x": 315,
+        "y": 1577,
+        "wires": []
+    },
+    {
+        "id": "d933a54b.a94a08",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "concatDates",
+        "func": "// CONCAT DATE AND TIME\nvar startDate = flow.get('startInput').substring(0, 10) || \"\";\nvar endDate = flow.get('endInput').substring(0, 10) ||\"\";\n\nvar newStartDateTime = startDate + \" \";\nvar newEndDateTime = endDate + \" \";\n\nflow.set('startInput', newStartDateTime + \"00:00:00\");\nflow.set('endInput', newEndDateTime + \"23:59:59\");\n\n//DEBUG\nmsg.payload = flow.get('startInput');\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 395,
+        "y": 1397,
+        "wires": [
+            [
+                "adab51e0.84115"
+            ]
+        ]
+    },
+    {
+        "id": "adab51e0.84115",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "validateDates",
+        "func": "// CHECK IF DATES ARE OK\nvar startInput = flow.get('startInput');\nvar endInput = flow.get('endInput');\n\nvar startTimestampDate = new Date(startInput).getTime();\nvar endTimestampDate = new Date(endInput).getTime();\n\nif (startTimestampDate < endTimestampDate)\n    msg.payload = \"OK\";\nif (startTimestampDate >= endTimestampDate)\n    msg.payload = \"KO\";\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 585,
+        "y": 1397,
+        "wires": [
+            [
+                "dcd47750.bc9eb8"
+            ]
+        ]
+    },
+    {
+        "id": "dcd47750.bc9eb8",
+        "type": "switch",
+        "z": "dc2d0fc7.ab66f",
+        "name": "validateVariables",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "OK",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "KO",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 835,
+        "y": 1397,
+        "wires": [
+            [
+                "ff28f91c.b0a548"
+            ],
+            [
+                "56d890a4.e9068"
+            ]
+        ],
+        "outputLabels": [
+            "msg.payload",
+            "msg.payload"
+        ]
+    },
+    {
+        "id": "ff28f91c.b0a548",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "getFlowVariables",
+        "func": "\nvar startInput = flow.get('startInput');\nvar endInput = flow.get('endInput');\nvar uuid = flow.get('uuid');\n\nvar payload = {\"uuid\": uuid, \"start\": startInput,\"end\": endInput};\nnode.log(typeof data);\n//msg.payload = JSON.stringify(data);\n//msg.payload.startInput = startInput;\n//msg.payload.endInput = endInput;\nmsg.payload = payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 995,
+        "y": 1277,
+        "wires": [
+            [
+                "c14135d1.12c4b8",
+                "2da5530d.d27a6c"
+            ]
+        ]
+    },
+    {
+        "id": "9eca7d7a.cefb6",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 1455,
+        "y": 1217,
+        "wires": []
+    },
+    {
+        "id": "2b952c7.b5138d4",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "prepara o payload e envia. 1 deles funciona",
+        "info": "",
+        "x": 955,
+        "y": 1237,
+        "wires": []
+    },
+    {
+        "id": "8ac86e2d.eb56e",
+        "type": "moment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "timestampToStartDate",
+        "topic": "",
+        "input": "payload",
+        "inputType": "msg",
+        "inTz": "Europe/London",
+        "adjAmount": 0,
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "YYYY-MM-DD",
+        "locale": "C",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/London",
+        "x": 485,
+        "y": 1457,
+        "wires": [
+            [
+                "61b41209.23f1cc"
+            ]
+        ]
+    },
+    {
+        "id": "c4a02099.de10b",
+        "type": "moment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "timestampToEndDate",
+        "topic": "",
+        "input": "payload",
+        "inputType": "msg",
+        "inTz": "Europe/London",
+        "adjAmount": 0,
+        "adjType": "days",
+        "adjDir": "add",
+        "format": "YYYY-MM-DD",
+        "locale": "C",
+        "output": "payload",
+        "outputType": "msg",
+        "outTz": "Europe/London",
+        "x": 485,
+        "y": 1497,
+        "wires": [
+            [
+                "75f3da91.7252e4"
+            ]
+        ]
+    },
+    {
+        "id": "c72236b2.7263b8",
+        "type": "http in",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "url": "/monitor",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 257.9999542236328,
+        "y": 1919.9998960494995,
+        "wires": [
+            [
+                "45b8b679.0440b8",
+                "5412c84d.950cc8"
+            ]
+        ]
+    },
+    {
+        "id": "45b8b679.0440b8",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "msg.apikey = \"<map api key>\";",
+        "func": "//Assign API Key\nmsg.payload.apikey = \"AIzaSyBN2FXBWTua_2NZOXrWEqzj4nAAbi9C08Q\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 558.0173530578613,
+        "y": 1979.9999127388,
+        "wires": [
+            [
+                "aca06e53.658ba"
+            ]
+        ]
+    },
+    {
+        "id": "c0918c84.56089",
+        "type": "template",
+        "z": "dc2d0fc7.ab66f",
+        "name": "CSS",
+        "field": "payload.style",
+        "fieldType": "msg",
+        "format": "html",
+        "syntax": "mustache",
+        "template": "body{\n  font-family: 'Droid Sans', 'Helvetica', Arial, sans-serif;\n  margin:5px;\n}\n#map{\n  display: block;\n  width: 95%;\n  height: 500px;\n  margin: 0 auto;\n  -moz-box-shadow: 0px 5px 20px #ccc;\n  -webkit-box-shadow: 0px 5px 20px #ccc;\n  box-shadow: 0px 5px 20px #ccc;\n}\n#map.large{\n  height:600px;\n}\n\n.overlay{\n  display:block;\n  text-align:center;\n  color:#fff;\n  font-size:60px;\n  line-height:80px;\n  opacity:0.8;\n  background:#4477aa;\n  border:solid 3px #336699;\n  border-radius:4px;\n  box-shadow:2px 2px 10px #333;\n  text-shadow:1px 1px 1px #666;\n  padding:0 4px;\n}\n\n.overlay_arrow{\n  left:50%;\n  margin-left:-16px;\n  width:0;\n  height:0;\n  position:absolute;\n}\n.overlay_arrow.above{\n  bottom:-15px;\n  border-left:16px solid transparent;\n  border-right:16px solid transparent;\n  border-top:16px solid #336699;\n}\n.overlay_arrow.below{\n  top:-15px;\n  border-left:16px solid transparent;\n  border-right:16px solid transparent;\n  border-bottom:16px solid #336699;\n}\n\n#toast-container > .toast {\n    background-image: none !important;\n}\n\n#toast-container > .toast:before {\n    position: fixed;\n    font-family: FontAwesome;\n    font-size: 24px;\n    line-height: 18px;\n    float: left;\n    color: #FFF;\n    padding-right: 0.5em;\n    margin: auto 0.5em auto -1.5em;\n}        \n#toast-container > .toast-warning:before {\n    content: \"\\f119\";\n}\n#toast-container > .toast-error:before {\n    content: \"\\f119\";\n}\n#toast-container > .toast-info:before {\n    content: \"\\f005\";\n}\n#toast-container > .toast-success:before {\n    content: \"\\f002\";\n}",
+        "x": 801.0172729492188,
+        "y": 1981.9998779296875,
+        "wires": [
+            [
+                "e61c314b.ceef5"
+            ]
+        ]
+    },
+    {
+        "id": "aca06e53.658ba",
+        "type": "template",
+        "z": "dc2d0fc7.ab66f",
+        "name": "JavaScript",
+        "field": "payload.script",
+        "fieldType": "msg",
+        "format": "javascript",
+        "syntax": "plain",
+        "template": "/////////////////////////////////\n// Global \n\nvar loc = window.location;\nvar ws;\nvar wsUri = \"ws:\";\nvar map;\nvar markers = [];\n var contentString = '<div id=\"content\">'+\n      '<div id=\"siteNotice\">'+\n      '</div>'+\n      '<h1 id=\"firstHeading\" class=\"firstHeading\">Uluru</h1>'+\n      '<div id=\"bodyContent\">'+\n      '<p><b>Uuid: </b> 15 </p>' +\n      '<p><b>Uuid: </b> 15 </p>' +\n      '<p><b>Uuid: </b> 15 </p>' +\n      '<p><b>Uuid: </b> 15 </p>' +\n      '<p><b>Uuid: </b> 15 </p>' +\n      '</div>'+\n      '</div>';\n\nif (loc.protocol === \"https:\") { wsUri = \"wss:\"; }\n// This needs to point to the web socket in the Node-RED flow\n// ... in this case it's ws/simple\nwsUri += \"//\" + loc.host + loc.pathname.replace(\"monitor\",\"ws/alert\");\n\n//////////////////////////////////////////////\n//  google map\n\nfunction initMap() {\n    map = new google.maps.Map(document.getElementById('map'), {\n          zoom: 13,\n          center: {lat: -28.26278, lng: -52.40667}\n    });\n}\n\n/*\n msg.payload = {\n    addr : 'Casa do seu Arlindo',\n    uuid: 'uuid',\n    la : -28.28278,\n    lo : -52.40667,\n    type : 'alertaST',\n    severity : 1\n  };\n\n\n  {\n    \"uuid\": \"qweryy\",\n    \"event_type\": \"sdff\",\n    \"energy_ativa\": \"sd\",\n    \"voltage_real_rms\": \"sddd\",\n    \"phase_real_rms\": \"f\",\n    \"lat\": \"1234\",\n    \"lon\": \"12432\"\n}\n*/\n\nfunction dropCasa(type, addr, lat, lon, uuid, event_type, energy_ativa, voltage_real_rms, phase_real_rms, alert_info) {\n    \n    clearMarker(addr);\n    var marker;\n    var infowindow;\n    var contentStringData = '<div id=\"content\">' +\n        '<div id=\"siteNotice\">' +\n        '</div>' +\n        '<h1 id=\"firstHeading\" class=\"firstHeading\">Ultimo evento</h1>' +\n        '<div id=\"bodyContent\">' +\n        '<p><b>Uuid: </b>' + uuid + '</p>' +\n        '<p><b>Ultimo evento: </b> ' + event_type + ' </p>' +\n        '<p><b>Consumo total: </b> ' + energy_ativa + ' </p>' +\n        '<p><b>Corrente: </b> ' + phase_real_rms + ' </p>' +\n        '<p><b>Tensão: </b> ' + voltage_real_rms + ' </p>' +\n        '</div>' +\n        '</div>';\n    \n    var contentStringDataAlerta = '<div id=\"content\">' +\n        '<div id=\"siteNotice\">' +\n        '</div>' +\n        '<h1 id=\"firstHeading\" class=\"firstHeading\">Alerta de evento!</h1>' +\n        '<div id=\"bodyContent\">' +\n        '<p>O ultimo evento detectado foi um alerta de <b>'+ alert_info+' </b>.</p>' +\n        '<p><b>Uuid: </b>' + uuid + '</p>' +\n        '<p><b>Ultimo evento: </b> ' + event_type + ' </p>' +\n        '<p><b>Consumo total: </b> ' + energy_ativa + ' </p>' +\n        '<p><b>Corrente: </b> ' + phase_real_rms + ' </p>' +\n        '<p><b>Tensão: </b> ' + voltage_real_rms + ' </p>' +\n        '</div>' +\n        '</div>';\n        \n    if (type === 'alertaST') {\n        marker = new google.maps.Marker({\n        position: {lat: lat, lng: lon},\n        title : addr,\n        map: map,\n        label : 'A',\n        animation: google.maps.Animation.DROP\n        });\n        \n        infowindow = new google.maps.InfoWindow({\n        content: contentStringDataAlerta\n         });\n    } else {    \n        marker = new google.maps.Marker({\n        position: {lat: lat, lng: lon},\n        title : addr,\n        map: map,\n        label : 'C',\n        animation: google.maps.Animation.DROP\n        });   \n        \n        infowindow = new google.maps.InfoWindow({\n            content: contentStringData\n        });\n    }\n\n\n    \n    \n    marker.addListener('click', function() {\n    infowindow.open(map, marker);\n    });\n    \n    markers.push(marker);\n}\n\n\n\n\n\n\nfunction dropMarker (type, addr, la, lo) {\n    \n    clearMarker(addr);\n    var marker;\n    var infowindow;\n    if (type === 'alertaST') {\n        marker = new google.maps.Marker({\n        position: {lat: la, lng: lo},\n        title : addr,\n        map: map,\n        label : 'A',\n        animation: google.maps.Animation.DROP\n        });\n    } else {\n        marker = new google.maps.Marker({\n        position: {lat: la, lng: lo},\n        title : addr,\n        map: map,\n        label : 'G',\n        animation: google.maps.Animation.DROP\n        });    \n    }\n    \n    infowindow = new google.maps.InfoWindow({\n        content: contentString\n    });\n    \n    marker.addListener('click', function() {\n    infowindow.open(map, marker);\n    });\n    \n    markers.push(marker);\n}\n\n\n\n\nfunction clearMarkers() {\n    for ( var i = 0; i < markers.length; i++) {\n        markers[i].setMap(null);\n    }\n}\n\nfunction clearMarker(addr) {\n    for ( var i = 0; i < markers.length; i++) {\n        if ( markers[i].title == addr ) markers[i].setMap(null);\n    }\n}\n\n////////////////////////////////////////////////\n// Toastr\n\nfunction showToast(type, addr, la, lo, alert_type) {  \n    toastr.options.positionClass = 'toast-bottom-full-width';    toastr.options.extendedTimeOut = 0; //1000;\n    toastr.options.timeOut = 10000;\n    toastr.options.fadeOut = 250;\n    toastr.options.fadeIn = 250;\n    var msg = ' Endereço : ' + addr;\n    msg = msg + ', Latitude : '+ la;\n    msg = msg + ', Longitude : '+ lo;\n        \n    if ( type === 'alertaST') {\n        toastr.warning('<b>Alerta de '+ alert_type + ' </b> '+msg);\n    } else {\n        toastr.error('<b>Alerta</b> '+msg);\n    }\n}\n\n/////////////////////////////////////////////////\n//adição da info windows\n\n\n\n\n///////////////////////////////////////////////\n// WebSocket \n\nfunction wsConnect() {\n    \n    console.log(\"connect\",wsUri);\n    ws = new WebSocket(wsUri);\n\n    ws.onopen = function() {\n       console.log(\"connected\");\n    }\n    ws.onclose = function() {\n        setTimeout(wsConnect,5000);\n    }\n    \n    ws.onmessage = function(msg) {\n        var payloads = JSON.parse(msg.data);\n        console.log(payloads);\n        payloads.forEach(payload => {\n            //insert Marker\n            //dropMarker(payload.type, payload.addr, payload.la, payload.lo);\n            var alert;\n            if(payload.alert_info != \"none\"){\n                showToast(\"alertaST\", payload.uuid, payload.lat, payload.lon, payload.alert_info);\n                dropCasa(\"alertaST\", payload.uuid, payload.lat,payload.lon, payload.uuid, payload.event_type, payload.energy_ativa, payload.voltage_real_rms, payload.phase_real_rms, payload.alert_info);\n                \n            }else{\n                 dropCasa(\"alert_info\", payload.uuid, payload.lat,payload.lon, payload.uuid, payload.event_type, payload.energy_ativa, payload.voltage_real_rms, payload.phase_real_rms, payload.alert_info);\n                \n            }\n        });\n    }\n}\n\nfunction action(m) {\n    // Nothing has been defined yet\n    if (ws) { ws.send(m); }\n}\n",
+        "x": 725.0173187255859,
+        "y": 1914.9998817443848,
+        "wires": [
+            [
+                "c0918c84.56089"
+            ]
+        ]
+    },
+    {
+        "id": "ef66fb06.bef8c8",
+        "type": "http response",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1064.017292022705,
+        "y": 1970.999912261963,
+        "wires": []
+    },
+    {
+        "id": "e61c314b.ceef5",
+        "type": "template",
+        "z": "dc2d0fc7.ab66f",
+        "name": "HTML",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<!doctype html>\n<html>\n<head>\n    <!-- Required meta tags -->\n    <meta charset=\"utf-8\">\n    <meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\n\n    <!-- Bootstrap CSS -->\n    <!-- Latest compiled and minified CSS -->\n    <link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\" integrity=\"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u\" crossorigin=\"anonymous\">\n    <link rel=\"stylesheet\" href=\"https://use.fontawesome.com/releases/v5.1.0/css/all.css\" integrity=\"sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt\" crossorigin=\"anonymous\">\n    <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.css\" crossorigin=\"anonymous\">\n    <style>{{{payload.style}}}</style>\n    \n    <!-- jQuery first, then Bootstrap JS -->\n    <script src=\"https://code.jquery.com/jquery-2.2.4.js\" integrity=\"sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=\"  crossorigin=\"anonymous\"></script> <!-- Latest compiled and minified JavaScript -->\n    <script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\" integrity=\"sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa\" crossorigin=\"anonymous\"></script>\n    <script src=\"https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js\" crossorigin=\"anonymous\"></script> \n    \n    <script>{{{payload.script}}}</script>\n</head>\n<body onload=\"wsConnect();\" onunload=\"ws.disconnect();\">\n\n<div class=\"container\">\n    <div class=\"page-header\">\n    <h1>Mapa de ultimo evento<small>:) </small></h1>\n    </div>\n</div>\n<div class=\"container\">\n    <div class=\"row justify-content-center\">\n        <div class=\"col-12 col-lg-8 col-md-12\"> \n            <div id=\"map\"></div>\n        </div>\n        <div class=\"col-4\">\n            <h1>ISO37120</h1>\n            \n            <div id=\"funcs\">\n                <h2>7.1</h2><p id=\"71\">1</p>\n                <h2>7.2</h2><p id=\"72\">1</p>\n                <h2>7.3</h2><p id=\"73\">1</p>\n            </div>\n        </div>\n    </div>\n    <br>\n    <br>\n</div>\n<script async defer\n    src=\"https://maps.googleapis.com/maps/api/js?key={{{payload.apikey}}}&callback=initMap\">\n</script>\n    \n</body>\n</html>",
+        "x": 916.0173263549805,
+        "y": 1923.9998779296875,
+        "wires": [
+            [
+                "ef66fb06.bef8c8"
+            ]
+        ]
+    },
+    {
+        "id": "542a90bb.4c925",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "injeta a apikey (API Key)",
+        "info": "",
+        "x": 491.0172996520996,
+        "y": 2017.9998779296875,
+        "wires": []
+    },
+    {
+        "id": "f0a84e85.4cc4a",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": " get /monitor",
+        "info": "",
+        "x": 277.0173110961914,
+        "y": 1832.999846458435,
+        "wires": []
+    },
+    {
+        "id": "37173d27.f44b82",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Alert Message to Browser",
+        "info": "",
+        "x": 944.017276763916,
+        "y": 2103.9998512268066,
+        "wires": []
+    },
+    {
+        "id": "a95d2cde.1b1c2",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "meu mapa ",
+        "info": "",
+        "x": 447.0172882080078,
+        "y": 1834.9998960494995,
+        "wires": []
+    },
+    {
+        "id": "1e9efb0b.802b25",
+        "type": "inject",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "topic": "",
+        "payload": "[{\"uuid\":\"123.123.123.123\",\"event_type\":\"EVENT_UP\",\"energy_ativa\":\"123\",\"voltage_real_rms\":\"220\",\"phase_real_rms\":\"1234\",\"lat\":-28.26278,\"lon\":-52.40667,\"alert_info\":\"none\"},{\"uuid\":\"4324.423423.32423.423.44\",\"event_type\":\"EVENT_DOWN\",\"energy_ativa\":\"123\",\"voltage_real_rms\":\"099999999999\",\"phase_real_rms\":\"123\",\"lat\":-28.27278,\"lon\":-52.40667,\"alert_info\":\"Sobretensão\"}]",
+        "payloadType": "json",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 318.1839485168457,
+        "y": 2197.888741493225,
+        "wires": [
+            [
+                "99e3a045.a77a2"
+            ]
+        ]
+    },
+    {
+        "id": "ef799c20.d1946",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Alert Generator",
+        "func": "var msg ={};\n\nvar count = Math.floor(Math.random() * Math.floor(4));\n\nswitch ( count ) {\ncase 0 : \n  msg.payload = {\n    addr : 'Casa do seu Zé',\n    la : -28.26278,\n    lo : -52.40667,\n    type : 'nada',\n    severity : 3\n  };\n  break;\ncase 1 :\n  msg.payload = {\n    addr : 'Casa do seu Arlindo',\n    la : -28.28278,\n    lo : -52.40667,\n    type : 'alertaST',\n    severity : 1\n  };\n  break;\ncase 2 :\n  msg.payload = {\n    addr : 'Casa do seu Joao',\n    la : -28.24278,\n    lo : -52.42667,\n    type : 'nada',\n    severity : 3\n  };\n  break;\ncase 3 :\n  msg.payload = {\n    addr : '9-165 Edgeworth Pl',\n    la : 40.483208,\n    lo : -74.454688,\n    type : 'nada',\n    severity : 3\n  };\n  break;\ndefault :\n  msg.payload = {\n    addr : '300 Somerset St',\n    la : 40.492735,\n    lo : -74.456407,\n    type : 'Nada',\n    severity : 2\n  };\n  break;\n\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 671.1839294433594,
+        "y": 2160.333186149597,
+        "wires": [
+            [
+                "89780bdc.882d18"
+            ]
+        ]
+    },
+    {
+        "id": "880976f4.54c8a8",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 701.1839408874512,
+        "y": 2291.7776317596436,
+        "wires": []
+    },
+    {
+        "id": "89780bdc.882d18",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 947.1839408874512,
+        "y": 2213.777656555176,
+        "wires": []
+    },
+    {
+        "id": "1cb6a02.7263f6",
+        "type": "websocket out",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "server": "af05b9e3.87c548",
+        "client": "",
+        "x": 944.1839408874512,
+        "y": 2143.666572570801,
+        "wires": []
+    },
+    {
+        "id": "eac96cc5.09c91",
+        "type": "websocket in",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "server": "af05b9e3.87c548",
+        "client": "",
+        "x": 339.1839599609375,
+        "y": 2295.111071586609,
+        "wires": [
+            [
+                "880976f4.54c8a8"
+            ]
+        ]
+    },
+    {
+        "id": "2337df91.4821f",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Coomunicate with Browser",
+        "info": "",
+        "x": 340.1839370727539,
+        "y": 2252.333194732666,
+        "wires": []
+    },
+    {
+        "id": "5151a132.0d9b8",
+        "type": "comment",
+        "z": "dc2d0fc7.ab66f",
+        "name": "Injeta um alerta qualqeur  a cada 5 segundos",
+        "info": "",
+        "x": 386.1839370727539,
+        "y": 2121.3193073272705,
+        "wires": []
+    },
+    {
+        "id": "5412c84d.950cc8",
+        "type": "http request",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": false,
+        "url": "http://localhost:4567/initialMap",
+        "tls": "",
+        "proxy": "",
+        "authType": "",
+        "x": 395.68045806884766,
+        "y": 2060.138689994812,
+        "wires": [
+            [
+                "cfad38a6.2e9b78"
+            ]
+        ]
+    },
+    {
+        "id": "e9bc39da.14e7e8",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 952.6840019226074,
+        "y": 2053.8574447631836,
+        "wires": []
+    },
+    {
+        "id": "74ee6b93.0c9b64",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "house generator",
+        "func": "//var msg ={};\n\n/*\nmsg.payload = {\n    addr : 'Casa do seusssssssss Zé',\n    la : -28.26278,\n    lo : -52.40667,\n    type : 'nada',\n    severity : 3\n  };\n*/\nreturn msg;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 706.0173797607422,
+        "y": 2055.1213326454163,
+        "wires": [
+            [
+                "e9bc39da.14e7e8",
+                "1cb6a02.7263f6"
+            ]
+        ]
+    },
+    {
+        "id": "cfad38a6.2e9b78",
+        "type": "delay",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "3",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 547.6805114746094,
+        "y": 2062.569306373596,
+        "wires": [
+            [
+                "74ee6b93.0c9b64"
+            ]
+        ]
+    },
+    {
+        "id": "99e3a045.a77a2",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "real Alert Generator",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 705.0172882080078,
+        "y": 2220.7880487442017,
+        "wires": [
+            [
+                "89780bdc.882d18",
+                "1cb6a02.7263f6"
+            ]
+        ]
+    },
+    {
+        "id": "13c221a9.42169e",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "func": "var m = {};\nm.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];\nm.data = [[28, 48, 40, 19, 86, 27, 90]];\nm.series = ['Series A'];\nreturn {payload:[m],topic:msg.topic};",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1545.5,
+        "y": 1324,
+        "wires": [
+            [
+                "1fcae734.dbd199"
+            ]
+        ]
+    },
+    {
+        "id": "1fcae734.dbd199",
+        "type": "ui_chart",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "group": "f4cfbc61.8416f",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "auto",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 1686.5,
+        "y": 1323,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "15f5dca5.44c253",
+        "type": "inject",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 1390.5,
+        "y": 1328,
+        "wires": [
+            [
+                "13c221a9.42169e"
+            ]
+        ]
+    },
+    {
+        "id": "9f52ff73.edab5",
+        "type": "http request",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": true,
+        "url": "http://localhost:4567/lastevent",
+        "tls": "",
+        "proxy": "",
+        "authType": "",
+        "x": 404.5,
+        "y": 705,
+        "wires": [
+            [
+                "b9117e0.c5fbf8",
+                "c8be2f83.85853"
+            ]
+        ]
+    },
+    {
+        "id": "c8be2f83.85853",
+        "type": "debug",
+        "z": "dc2d0fc7.ab66f",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 544,
+        "y": 843,
+        "wires": []
+    },
+    {
+        "id": "9a7b270a.61c398",
+        "type": "function",
+        "z": "dc2d0fc7.ab66f",
+        "name": "getFlowVariables",
+        "func": "\n\nvar uuid = flow.get('uuid');\n\nvar payload = {\"uuid\": uuid};\nnode.log(typeof data);\n//msg.payload = JSON.stringify(data);\n//msg.payload.startInput = startInput;\n//msg.payload.endInput = endInput;\nmsg.payload = payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 227,
+        "y": 706,
+        "wires": [
+            [
+                "9f52ff73.edab5"
+            ]
+        ]
+    },
+    {
+        "id": "6e234efd.43c4d",
+        "type": "ui_group",
+        "z": "",
+        "name": "GraficoDe",
+        "tab": "bbeef661.bd34a8",
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "bff1ed6c.fb267",
+        "type": "ui_group",
+        "z": "",
+        "name": "corrente",
+        "tab": "57bac2ce.88e1dc",
+        "order": 3,
+        "disp": false,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "6f685b7e.05b7f4",
+        "type": "ui_group",
+        "z": "",
+        "name": "corrente2",
+        "tab": "57bac2ce.88e1dc",
+        "order": 4,
+        "disp": false,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "9572188c.421b78",
+        "type": "ui_group",
+        "z": "",
+        "name": "Ultimo Evento",
+        "tab": "57bac2ce.88e1dc",
+        "order": 5,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "b29a1c91.4daa7",
+        "type": "ui_group",
+        "z": "",
+        "name": "Gráficos",
+        "tab": "57bac2ce.88e1dc",
+        "order": 2,
+        "disp": false,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "1f6404d.3ab8cfb",
+        "type": "ui_group",
+        "z": "",
+        "name": "login",
+        "tab": "57bac2ce.88e1dc",
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "8aa46274.0629d",
+        "type": "ui_group",
+        "z": "",
+        "name": "GraficoPara",
+        "tab": "bbeef661.bd34a8",
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "af05b9e3.87c548",
+        "type": "websocket-listener",
+        "z": "",
+        "path": "/ws/alert",
+        "wholemsg": "false"
+    },
+    {
+        "id": "f4cfbc61.8416f",
+        "type": "ui_group",
+        "z": "",
+        "name": "DefaultChart",
+        "tab": "bbeef661.bd34a8",
+        "order": 1,
+        "disp": true,
+        "width": "12",
+        "collapse": false
+    },
+    {
+        "id": "bbeef661.bd34a8",
+        "type": "ui_tab",
+        "z": "",
+        "name": "GraficosDefault",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "57bac2ce.88e1dc",
+        "type": "ui_tab",
+        "z": "",
+        "name": "GraficoUltimoEvento",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]

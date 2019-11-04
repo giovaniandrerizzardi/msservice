@@ -2,8 +2,8 @@ from processors import decoder, interscityManager
 import json
 import requests
 
-dados = decoder.processData_decode("EV_276")
-#interscityManager.sendInfoToInterSCity(dados)
+dados = decoder.processData_decode("EV_263", '407da65d-712a-4a8a-b3ca-6eb8e8881374')
+interscityManager.sendInfoToInterSCity(dados)
 
 datajson = {
         "event_type": dados.Event,
@@ -14,7 +14,7 @@ datajson = {
     }
 
 print (datajson)
-requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
+#requests.post("http://127.0.0.1:1880/attstatus", data=datajson)
 
 
 print ("OKKKKKKKKKKKKKKKK")

@@ -184,7 +184,7 @@ def decode_data(data):
         return None
 
 
-def processData_decode(msg, mostra=1):
+def processData_decode(msg,scriptUuid):
    # print("processData_decode, received EventCode : " + msg)
     if msg == "EV_263":
         msg = EV_263
@@ -192,7 +192,7 @@ def processData_decode(msg, mostra=1):
         msg = EV_275
     elif msg == "EV_276":
         msg = EV_276
-        
+    mostra = 1    
     header = msg[0:HEADER_SIZE]  # total 40 bytes
     data = msg[HEADER_SIZE::]  # total 15360 bytes
     
@@ -219,8 +219,12 @@ def processData_decode(msg, mostra=1):
     
     for r in uuidbyte:
         uuid += chr(r)
-    print("UUID : ",uuid)
-    dados.uuid = uuid
+    if scriptUuid != '':
+        print("UUID : ",uuid)
+        dados.uuid = scriptUuid
+    else:
+        print("UUID : ",uuid)
+        dados.uuid = uuid
 
     # está no firmware do TEXAS TM4C como constantes e aqui tambem
     dados.phaseOffset = IFASE_OFFSET
