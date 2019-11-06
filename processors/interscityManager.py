@@ -25,9 +25,11 @@ def sendInfoToInterSCity(dados):
         print('o ultimo evento foi : ', lastEvent)
         newEventId = lastEvent.id_evento + 1
         consumoEvento = round(float(dados.energy_ativa) - lastEvent.total_consume, 5)
+        dados.specific_energy_ativa = consumoEvento
     except model.last_event.DoesNotExist:
         print("DATA NOT FOUND")
         consumoEvento = 0.0
+        dados.specific_energy_ativa = dados.energy_ativa
 
     
 
@@ -122,20 +124,16 @@ def getDataByRange(uuid, startDate, endDate):
         '/collector/resources/' + uuid + '/data'
     print ("Get Energy information with range ", startDate, " until ", endDate)
     r = requests.post(url, json={'start_date': startDate, 'end_date': endDate})
-   
+    if r.status_code > 299:
+        print('algum erro ocorreu no interscity')
+        return 0
+
     data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
+    if data.resources == []:
+        print ("Nenhum evento neste periodo.")
+        return
     infoConsumoList = data.resources[0].capabilities.infoConsumo
-    #totalDailyEnergy = 0
-    dados = []
     
-    for s in infoConsumoList:
-        
-        dados.energy_ativa = s.energy_ativa
-        dados.date = s.date
-    #print ("Daily total energy: ", totalDailyEnergy, "kWh")
-
-    #print(r.text)
-
     return infoConsumoList
 
 
@@ -157,8 +155,7 @@ def getDynamicData(uuid, parameterString):
     else :
         url += '/data'
 
-  #  if parameterString != None :
-   #     url+= '/'+parameterString
+    print('buscando dados dinamicos com o json ', parameterString)
     print (url)
     r = requests.post(url, json=parameterString)
     #print (r.text)

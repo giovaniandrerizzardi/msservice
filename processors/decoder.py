@@ -72,6 +72,7 @@ class objHeader_:
     erro_VAr = 0
     uuid = ''
     alerta = ''
+    specific_energy_ativa = 0.0
 
 class objSamples_():
     phase = []

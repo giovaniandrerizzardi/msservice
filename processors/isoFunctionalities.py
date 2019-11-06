@@ -2,6 +2,8 @@ from processors import interscityManager,model
 import json
 from collections import namedtuple
 from peewee import fn
+import datetime
+
 def func71(requestUuid):
     print("funcionalidade 7.1 - O consumo total de energia el ́etrica residencial per capita")
    # r = interscityManager.getDynamicData('uuid','parametros')
@@ -155,14 +157,30 @@ def func77(requestUuid):
             else:
                 
                 infoConsumoList = data.resources[0].capabilities.infoConsumo
+                diference = {}
+                interruptCount = 0
                 for s in infoConsumoList:
+
                     print(s.Event_count_texas_tot)
                     prevEvent = auxfunc(casa.uuid, s.Event_count_texas_tot)
-                    print('evento antes de desliga: ', prevEvent.date,
-                          ' data do desligamento : ', s.date)
-                return 0
-#
-#func77('')
+                    if prevEvent == 0:
+                        print('não encontrou o evento anterior. Esta medição será ignorada...')
+                    else:
+                        print('evento antes de desliga: ', prevEvent.date,
+                            ' data do desligamento : ', s.date)
+                        datePrevEvent = datetime.datetime.strptime(prevEvent.date, '%Y-%m-%dT%H:%M:%S.%fz')
+                        dateOffEvent = datetime.datetime.strptime(s.date, '%Y-%m-%dT%H:%M:%S.%fz')      
+                        diference = dateOffEvent - datePrevEvent
+                        interruptCount+=1
+                        print(diference)
+                if diference != {}:
+                    print('O tempo total que o usuario ficou sem energia foi de ', diference)
+                    response = diference / interruptCount
+                    print('A media de tempo que o usuario ficou sem luz foi de ', response)
+                    return response
+                print('nada a retornar...')
+                return '0'
+
 def auxfunc(requestUuid, id):
      datajson = {
          "capabilities": [
@@ -179,6 +197,7 @@ def auxfunc(requestUuid, id):
             'X', d.keys())(*d.values()))
         if data.resources == []:
             print("Nenhum evento cadastrado nesta casa.")
+            return 0
         else:
 
             infoConsumoList = data.resources[0].capabilities.infoConsumo

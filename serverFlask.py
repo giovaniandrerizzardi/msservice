@@ -4,12 +4,12 @@ from wtforms import TextField, IntegerField, SelectField, BooleanField
 from processors import interscityManager,mapFuncionalities,isoFunctionalities
 import json
 from collections import namedtuple
-import datetime
+from datetime import date, datetime, timedelta
 #from js.momentjs import moment
 #pip install moment
 
-import pandas as pd
-import datetime
+#import pandas as pd
+
 import numpy as np
 import operator
 
@@ -135,7 +135,7 @@ def attdashboard():
         "73" : sec73,
         "75" : sec75,
         "76" : sec76,
-        "77" : "n ha"
+        "77" : sec77
     }
     
     return response
@@ -160,68 +160,73 @@ def getLastEvent():
     print(datajson)
     return json.dumps(datajson)
 
+# object to access data header
+class _grafico:
+    data = []
+    labels = []
+    series = []
+
+def serialize(obj):
+    if isinstance(obj, date):
+        serial = obj.isoformat()
+        return serial
+
+    return obj.__dict__
+
 @app.route('/attdashboard', methods=['GET'])
 def attdashboardgraft():
     args = request.args
     print(args['uuid'])
     print(args['start'])
     print(args['end'])
-    response = 'sdsds'
-    response = interscityManager.getDataByRange(args['uuid'],args['start'],args['end'])
-    response = response.sort(key=operator.attrgetter('date'))
-
-    # Create a datetime variable for today
-    base = datetime.datetime.today()
-    # Create a list variable that creates 365 days of rows of datetime values
-    date_list = [base - datetime.timedelta(days=x) for x in range(0, 365)]
-    # Create a list variable of 365 numeric values
-    score_list = list(np.random.randint(low=1, high=1000, size=365))
-    # Create an empty dataframe
-    df = pd.DataFrame()
-
-    # Create a column from the datetime variable
-    df['datetime'] = date_list
-    # Convert that column into a datetime datatype
-    df['datetime'] = pd.to_datetime(df['datetime'])
-    # Set the datetime column as the index
-    df.index = df['datetime']
-    # Create a column from the numeric score variable
-    df['score'] = score_list
-
-    # Let's take a took at the data
-    df.head()
-    # Group the data by month, and take the mean for each group (i.e. each month)
-    df.resample('M').mean()
     
-    # Group the data by month, and take the sum for each group (i.e. each month)
-    df.resample('M').sum()
+    infoConsumoList = interscityManager.getDataByRange(args['uuid'],args['start'],args['end'])
 
-    #var m = {}
-    #m.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012']
-    #m.data = [[28, 48, 40, 19, 86, 27, 90]]
+    if infoConsumoList is 0:
+        print('erro no grafico')
+        return 'me ajuda'
+   
+    data = []
+    labels = []
+    series = []
+    for s in infoConsumoList:
+        #print('alo corno ',s.date)
+        data.append(round(s.energy_ativa,5))
+        labels.append(s.date)
+    series.append('Consumo')
+    
+    m = {
+        'labels' : labels,
+        'data' : [data],
+        'series' : ['Consumo']
+    }
+
     #m.series = ['Consumo']
    #http://kodumaro.blogspot.com/2008/05/ordenando-uma-lista-de-objetos-em.html
 
     #jsonBody = json.loads(str(request.json), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
     #print(jsonBody)
     
-    #dateFrom = jsonBody.dateFrom
-    #print(dateFrom)
-    #dsd = '1571704042711'
-    #print(moment.unix(int(dsd)))
-    #dateFrom = time.strftime("%D %H:%M", time.localtime(int("1571093522494")))
-    #dateTo = datetime.fromtimestamp(args.get('dateTo'))
-    #print(dateFrom)
-    return str(df.resample('M').sum())
+    return m
+    #return json.dumps(serialize(grafico))
 
 
-@app.route('/dashboard2', methods=['GET'])
+#@app.route('/dashboard2', methods=['GET'])
 def attdashboard2():
     
-    sec77 = isoFunctionalities.func77('')
+    #sec77 = isoFunctionalities.func77('')
+    infoConsumoList = interscityManager.getDataByRange('9c0772b8-c809-4865-bec7-70dd2013bc37','2019-05-02 00:00:00','2019-11-04 23:59:59')
+    grafico = _grafico()
+    
+    for s in infoConsumoList:
+        #print('alo corno ',s.date)
+        grafico.data.append(round(s.energy_ativa,5))
+        grafico.labels.append(s.date)
+    print(grafico)
+    print(grafico.data)
+    print(grafico.labels)
+    return grafico
 
-  
-    return 's'
-
+#attdashboard2()
 # Run the application
 app.run(debug=True, port= 4567)

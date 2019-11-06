@@ -109,5 +109,3 @@ def getById(uuid):
     return casa_info.get_by_id(uuid)
 
     #mysql_db.close()
-
-
