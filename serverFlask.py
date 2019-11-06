@@ -118,10 +118,10 @@ def attInitialMap():
 
 @app.route('/dashboard1', methods=['GET'])
 def attdashboard():
-    sec71 = isoFunctionalities.func71('')
+    sec71 = round(isoFunctionalities.func71(''),5)
     sec72 = isoFunctionalities.func72('passo fundo')
     sec73 = isoFunctionalities.func73()
-    sec75 = isoFunctionalities.func75()
+    sec75 = round(isoFunctionalities.func75(),5)
     sec76 = isoFunctionalities.func76()
     sec77 = isoFunctionalities.func77('')
     print(sec71)
@@ -130,12 +130,12 @@ def attdashboard():
     print(sec75)
     print(sec76)
     response = {
-        "71" : sec71,
-        "72" : sec72,
-        "73" : sec73,
-        "75" : sec75,
-        "76" : sec76,
-        "77" : sec77
+        "s71" : sec71,
+        "s72" : sec72,
+        "s73" : sec73,
+        "s75" : sec75,
+        "s76" : sec76,
+        "s77" : sec77
     }
     
     return response
