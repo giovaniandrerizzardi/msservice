@@ -148,12 +148,19 @@ def getLastEvent():
     requestedUuid = args['uuid']
     dados = interscityManager.getLastDataByUUID(requestedUuid)
     
+    specificConsume = 0
+    try:
+        specificConsume = dados.specific_energy_ativa
+    except AttributeError:
+        specificConsume = dados.energy_ativa
+    specificConsume = 0
     datajson = {
         "event_type": dados.Event,
         "energy_ativa": round(dados.energy_ativa, 3),
         "voltage_real_rms": round(dados.rmsVoltage_real,2),
         "phase_real_rms": round(dados.rmsPhase_real,2),
         "alert_type": dados.alerta,
+        "specific_energy_ativa": specificConsume,
         #"timestamp": dados.
         "total_energy_daily": round(interscityManager.getDataDaily(requestedUuid),5)
     }
@@ -179,37 +186,82 @@ def attdashboardgraft():
     print(args['uuid'])
     print(args['start'])
     print(args['end'])
-    
+    print(args['graphType'])
+
     infoConsumoList = interscityManager.getDataByRange(args['uuid'],args['start'],args['end'])
 
     if infoConsumoList is 0:
         print('erro no grafico')
         return 'me ajuda'
    
+    
+
+    graphType = args['graphType']
     data = []
     labels = []
     series = []
-    for s in infoConsumoList:
-        #print('alo corno ',s.date)
-        data.append(round(s.energy_ativa,5))
-        labels.append(s.date)
-    series.append('Consumo')
+    print(graphType)
+    if graphType == 'consumo':
+        data,labels,series = generateConsumoType(infoConsumoList)
+    elif graphType == 'tensao':
+        data,labels,series = generateTensaoType(infoConsumoList)
+    elif graphType == 'corrente':
+        data,labels,series = generateCorrenteType(infoConsumoList)
+        
     
     m = {
         'labels' : labels,
         'data' : [data],
-        'series' : ['Consumo']
+        'series' : series
     }
-
-    #m.series = ['Consumo']
-   #http://kodumaro.blogspot.com/2008/05/ordenando-uma-lista-de-objetos-em.html
-
-    #jsonBody = json.loads(str(request.json), object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
-    #print(jsonBody)
     
     return m
     #return json.dumps(serialize(grafico))
 
+
+
+def generateConsumoType(dados):
+    data = []
+    labels = []
+    series = []
+    for s in dados:
+        specificConsume = 0
+        try:
+            specificConsume = s.specific_energy_ativa
+        except AttributeError:
+            specificConsume = s.energy_ativa
+
+        data.append(round(specificConsume,5))
+        labels.append(s.date)
+    series.append('Consumo')
+    return data,labels,series
+
+def generateTensaoType(dados):
+    data = []
+    labels = []
+    series = []
+    for s in dados:
+        try:
+            data.append(round(s.rmsVoltage_real,2))
+            labels.append(s.date)
+        except AttributeError:
+            print('Nao tem tensao pra esse evento')
+    series.append('Tensão V')
+    return data,labels,series
+
+def generateCorrenteType(dados):
+    data = []
+    labels = []
+    series = []
+    for s in dados:
+        try:
+            data.append(round(s.rmsPhase_real,2))
+            labels.append(s.date)
+        except AttributeError:
+            print('Nao tem corrente pra esse evento')
+       
+    series.append('Corrente A')
+    return data,labels,series
 
 #@app.route('/dashboard2', methods=['GET'])
 def attdashboard2():
