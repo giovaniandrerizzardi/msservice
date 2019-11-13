@@ -1,7 +1,7 @@
 #pip install pymysql
 #pip install peewee
 
-from peewee import MySQLDatabase,CharField,IntegerField,Model,DoubleField,BooleanField,DateTimeField,fn, BigAutoField
+from peewee import MySQLDatabase,CharField,IntegerField,Model,DoubleField,BooleanField,DateTimeField,fn
 import datetime
 import pymysql
 
@@ -11,6 +11,7 @@ mysql_db = MySQLDatabase('mestrado', user='root', password='root',
         
 class casa_info(Model):
     uuid = CharField()
+    senha = CharField()
     nr_residentes = IntegerField()
     corrente_nominal = DoubleField()
     public_building = BooleanField()
@@ -107,5 +108,8 @@ def getMysqlInstance():
 def getById(uuid):
     mysql_db.connect()
     return casa_info.get_by_id(uuid)
+def getByIdAndPass(Suuid,password):
+    
+    return casa_info.select().where(casa_info.uuid == Suuid, casa_info.senha == password).get()
 
     #mysql_db.close()

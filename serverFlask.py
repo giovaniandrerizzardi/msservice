@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_wtf import Form
 from wtforms import TextField, IntegerField, SelectField, BooleanField
-from processors import interscityManager,mapFuncionalities,isoFunctionalities
+from processors import interscityManager,mapFuncionalities,isoFunctionalities, model
 import json
 from collections import namedtuple
 from datetime import date, datetime, timedelta
@@ -12,6 +12,8 @@ from datetime import date, datetime, timedelta
 
 import numpy as np
 import operator
+
+LOGIN_MAP = {}
 
 
 app = Flask(__name__)
@@ -144,7 +146,9 @@ def attdashboard():
 @app.route('/lastevent', methods=['GET'])
 def getLastEvent():
     args = request.args
-    print(args['uuid'])
+    print(args)
+    print(args['socketid'])
+    return '0'
     requestedUuid = args['uuid']
     dados = interscityManager.getLastDataByUUID(requestedUuid)
     
@@ -154,12 +158,18 @@ def getLastEvent():
     except AttributeError:
         specificConsume = dados.energy_ativa
     specificConsume = 0
+    alerta = 'none'
+    try:
+        alerta = dados.alerta
+    except AttributeError:
+        print('nao tem alerta')
+
     datajson = {
         "event_type": dados.Event,
         "energy_ativa": round(dados.energy_ativa, 3),
         "voltage_real_rms": round(dados.rmsVoltage_real,2),
         "phase_real_rms": round(dados.rmsPhase_real,2),
-        "alert_type": dados.alerta,
+        "alert_type": alerta,
         "specific_energy_ativa": specificConsume,
         #"timestamp": dados.
         "total_energy_daily": round(interscityManager.getDataDaily(requestedUuid),5)
@@ -278,6 +288,52 @@ def attdashboard2():
     print(grafico.data)
     print(grafico.labels)
     return grafico
+
+@app.route('/login', methods=['GET'])
+def auth ():
+    args = request.args
+    print(args['uuid'])
+    print(args['socketid'])
+
+    socketId = args['socketid']
+    uuid = args['uuid']
+    password = args['password']
+    try:
+        logInfo = model.getByIdAndPass(uuid, password)
+        print('retultados: ',logInfo.uuid)
+        LOGIN_MAP[socketId] = str(uuid)
+        print('login map = ' , LOGIN_MAP)
+        print("logado com sucesso")
+        return "0"
+    except Exception:
+        print("Erro")
+        return "1"
+
+@app.route('/logout', methods=['GET'])
+def logout ():
+    args = request.args
+    print(args['socketid'])
+
+    socketId = args['socketid']
+
+    try:
+        del LOGIN_MAP[socketId]
+        print("deslogado com sucesso")
+        return "0"
+    except Exception:
+        print("Erro")
+        return "1"
+
+
+
+def getUuidFromSocket(socket):
+    print(LOGIN_MAP)
+    accountLog = LOGIN_MAP.get(socket)
+    if accountLog is None:
+        print('nada encontrado na lista para o socket' , socket)
+        return None
+    else:
+        return accountLog
 
 #attdashboard2()
 # Run the application
