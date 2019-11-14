@@ -179,6 +179,7 @@ def cadastraRecurso(form):
     latitude = float(form.latitude.data)
     longitude = float(form.longitude.data)
     cidade= int(form.cidade.data)
+    senha = '123456789'
     
     description = 'Casa do:'+ first_name + ' ' + last_name
     data = {
@@ -198,7 +199,8 @@ def cadastraRecurso(form):
     print(response.text)
     data = json.loads(response.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
 
-    #model.addcasa_info(data.data.uuid, nr_residentes, corrente_nominal, public_building,tensao_nominal,latitude,longitude,cidade)
+    model.addcasa_info(data.data.uuid, senha, nr_residentes, corrente_nominal, public_building,tensao_nominal,latitude,longitude,cidade)
+    return data.data.uuid
     #e62100d7-7d80-4c1c-a7fe-477813c15e21
 
 #getResourceByUuid('30b057a1-a28a-4460-8784-77ba0f0801f9')

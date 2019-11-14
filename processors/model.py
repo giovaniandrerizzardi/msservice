@@ -83,9 +83,9 @@ def addNewCasa(casaUuid, nrResidentes, correnteNominal, publicBuilding):
     casa_info.insert(uuid=casaUuid, nr_residentes=nrResidentes, corrente_nominal=correnteNominal ,public_building=publicBuilding)
     casa_info.insert(UUIDField = casaUuid)
 
-def addcasa_info(Uuid, nrResidentes, correnteNominal, publicBuilding,tensaoNominal,Nlatitude, Nlongitude,Ncidade):
+def addcasa_info(Uuid, password, nrResidentes, correnteNominal, publicBuilding,tensaoNominal,Nlatitude, Nlongitude,Ncidade):
     mysql_db.connect()
-    casa_info.create(uuid = Uuid, nr_residentes=nrResidentes, corrente_nominal=correnteNominal ,public_building=publicBuilding, tensao_nominal = tensaoNominal, latitude = Nlatitude, longitude = Nlongitude, cidade = Ncidade)
+    casa_info.create(uuid=Uuid, senha = password, nr_residentes=nrResidentes, corrente_nominal=correnteNominal, public_building=publicBuilding, tensao_nominal=tensaoNominal, latitude=Nlatitude, longitude=Nlongitude, cidade=Ncidade)
     mysql_db.close()
 
 
