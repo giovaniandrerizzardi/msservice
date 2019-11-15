@@ -143,13 +143,27 @@ def attdashboard():
     return response
 
 
-@app.route('/lastevent', methods=['GET'])
-def getLastEvent():
+
+@app.route('/lasteventmui', methods=['GET'])
+def getLastEventmui():
     args = request.args
     print(args)
-    print(args['socketid'])
-    return '0'
-    requestedUuid = args['uuid']
+    socketid = ''
+    requestedUuid = ''
+    try:
+        socketid = args['socketid']
+        requestedUuid = args['uuid']
+        print(socketid)
+        if socketid is '':
+            print('socketId is null')
+            return '0'
+    except Exception:
+        print('deu exeção')
+        print('buscando uuid do socket id')
+        requestedUuid = getUuidFromSocket(socketid)
+    return '10'
+
+
     dados = interscityManager.getLastDataByUUID(requestedUuid)
     
     specificConsume = 0
@@ -173,6 +187,44 @@ def getLastEvent():
         "specific_energy_ativa": specificConsume,
         #"timestamp": dados.
         "total_energy_daily": round(interscityManager.getDataDaily(requestedUuid),5)
+    }
+    print(datajson)
+    return json.dumps(datajson)
+
+
+
+
+@app.route('/lastevent', methods=['GET'])
+def getLastEvent():
+    args = request.args
+    print(args)
+  
+    requestedUuid = args['uuid']
+
+
+    dados = interscityManager.getLastDataByUUID(requestedUuid)
+    
+    specificConsume = 0
+    try:
+        specificConsume = dados.specific_energy_ativa
+    except AttributeError:
+        specificConsume = dados.energy_ativa
+    specificConsume = 0
+    alerta = 'none'
+    try:
+        alerta = dados.alerta
+    except AttributeError:
+        print('nao tem alerta')
+
+    datajson = {
+        "event_type": dados.Event,
+        "energy_ativa": round(dados.energy_ativa, 3),
+        "voltage_real_rms": round(dados.rmsVoltage_real,2),
+        "phase_real_rms": round(dados.rmsPhase_real,2),
+        "alert_type": alerta,
+        "specific_energy_ativa": specificConsume
+        #"timestamp": dados.
+        #"total_energy_daily": round(interscityManager.getDataDaily(requestedUuid),5)
     }
     print(datajson)
     return json.dumps(datajson)
@@ -321,7 +373,7 @@ def logout ():
         print("deslogado com sucesso")
         return "0"
     except Exception:
-        print("Erro")
+        print("Erro ao tentar deslogar")
         return "1"
 
 
