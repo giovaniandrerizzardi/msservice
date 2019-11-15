@@ -200,8 +200,6 @@ def getLastEvent():
     print(args)
   
     requestedUuid = args['uuid']
-
-
     dados = interscityManager.getLastDataByUUID(requestedUuid)
     
     specificConsume = 0

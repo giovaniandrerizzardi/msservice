@@ -168,18 +168,29 @@ def getResourceByUuid(uuid):
     print(r.text)
     return r
 
-def cadastraRecurso(form):
-
-    first_name = form.first_name.data
-    last_name = form.last_name.data
-    nr_residentes = int(form.nr_residentes.data)
-    corrente_nominal = form.corrente_nominal.data
-    tensao_nominal = form.tensao_nominal.data
-    public_building = bool(form.public_building.data)
-    latitude = float(form.latitude.data)
-    longitude = float(form.longitude.data)
-    cidade= int(form.cidade.data)
-    senha = '123456789'
+def cadastraRecurso(form,istest):
+    if istest == 1:
+        first_name = form.first_name
+        last_name = form.last_name
+        nr_residentes = int(form.nr_residentes)
+        corrente_nominal = form.corrente_nominal
+        tensao_nominal = form.tensao_nominal
+        public_building = bool(form.public_building)
+        latitude = float(form.latitude)
+        longitude = float(form.longitude)
+        cidade= int(form.cidade)
+        senha = '123456789'
+    else:
+        first_name = form.first_name.data
+        last_name = form.last_name.data
+        nr_residentes = int(form.nr_residentes.data)
+        corrente_nominal = form.corrente_nominal.data
+        tensao_nominal = form.tensao_nominal.data
+        public_building = bool(form.public_building.data)
+        latitude = float(form.latitude.data)
+        longitude = float(form.longitude.data)
+        cidade = int(form.cidade.data)
+        senha = '123456789'
     
     description = 'Casa do:'+ first_name + ' ' + last_name
     data = {

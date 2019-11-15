@@ -1,4 +1,4 @@
-from processors import model
+from processors import model, environmentVariables
 
 def checkForAlert(dados):
 
@@ -6,11 +6,11 @@ def checkForAlert(dados):
     for casa in query:
         rmsPhase = float(casa.corrente_nominal)
         rmsTensao = float(casa.tensao_nominal)
-        if (rmsPhase + (rmsPhase * 5 / 100)) < dados.rmsPhase_real:
+        if (rmsPhase + (rmsPhase * environmentVariables.PORCENTAGEM_CORRENTE / 100)) < dados.rmsPhase_real:
             return 'SOBRECORRENTE'
-        if (rmsTensao + (rmsTensao * 5 / 100)) > dados.rmsVoltage_real:
+        if (rmsTensao + (rmsTensao * environmentVariables.PORCENTAGEM_TENSAO / 100)) < dados.rmsVoltage_real:
             return 'SOBRETENSÃO'
-        if (rmsTensao - (rmsTensao * 5 / 100)) < dados.rmsVoltage_real:
+        if (rmsTensao - (rmsTensao * environmentVariables.PORCENTAGEM_TENSAO / 100)) > dados.rmsVoltage_real:
             return 'SUBTENSÃO'
     return 'none'
 
