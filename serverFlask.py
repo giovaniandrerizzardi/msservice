@@ -84,7 +84,7 @@ def register():
         if len(first_name) == 0 or len(last_name) == 0:
             error = "Please supply both first and last name"
         else:
-            interscityManager.cadastraRecurso(form)
+            interscityManager.cadastraRecurso(form,0)
             return redirect(url_for('thank_you'))
 
     return render_template('register.html', form=form, message=error)
@@ -126,18 +126,19 @@ def attdashboard():
     sec75 = round(isoFunctionalities.func75(),5)
     sec76 = isoFunctionalities.func76()
     sec77 = isoFunctionalities.func77('')
-    print(sec71)
-    print(sec72)
-    print(sec73)
-    print(sec75)
-    print(sec76)
+    print('seção 71 = ', sec71)
+    print('seção 72 = ',sec72)
+    print('seção 73 = ',sec73)
+    print('seção 75 = ',sec75)
+    print('seção 76 = ',sec76)
+    print('seção 77 = ',sec77)
     response = {
         "s71" : sec71,
         "s72" : sec72,
         "s73" : sec73,
         "s75" : sec75,
         "s76" : sec76,
-        "s77" : sec77
+        "s77" : str(sec77)
     }
     
     return response

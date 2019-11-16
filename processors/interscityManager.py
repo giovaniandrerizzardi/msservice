@@ -63,7 +63,7 @@ def getLastDataByUUID(uuid):
     r = requests.get(url)
     data = json.loads(r.text, object_hook=lambda d: namedtuple(
         'X', d.keys())(*d.values()))
-    if data.resources == []:
+    if r.status_code != 200 or data.resources == []:
         print("Nenhum evento neste periodo.")
         return
     infoConsumoList = data.resources[0].capabilities.infoConsumo
