@@ -122,10 +122,12 @@ def getDataByRange(uuid, startDate, endDate):
     #uuid = "9c0772b8-c809-4865-bec7-70dd2013bc37"
     url = environmentVariables.INTERSCITY_MAIN_URL + \
         '/collector/resources/' + uuid + '/data'
+
     print ("Get Energy information with range ", startDate, " until ", endDate)
+    print( url)
     r = requests.post(url, json={'start_date': startDate, 'end_date': endDate})
     if r.status_code > 299:
-        print('algum erro ocorreu no interscity')
+        print('algum erro ocorreu no interscity. Status code = ', r.status_code)
         return 0
 
     data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))

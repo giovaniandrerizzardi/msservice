@@ -113,3 +113,9 @@ def getByIdAndPass(Suuid,password):
     return casa_info.select().where(casa_info.uuid == Suuid, casa_info.senha == password).get()
 
     #mysql_db.close()
+
+
+#addcasa_info('d750d04e-b64f-4a56-9b02-6437f795cd84','123456789',1,0.3,1,220,'-28.27278','-52.416669999999996',1)
+#addcasa_info('8a571135-9010-4f56-b930-59587de8167a','123456789',6,0.3,1,220,'-28.27278','-52.416669999999996',1)
+#addcasa_info('c62824b8-8500-415a-87c8-b4b4906422e5','123456789',8,0.3,1,220,'-28.27278','-52.416669999999996',1)
+#addcasa_info('cf7ab1dd-dfc2-400b-b772-d3c3fa4140da','123456789',6,0.3,1,220,'-28.29128','-52.430499999999995',1)

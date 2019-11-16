@@ -159,10 +159,13 @@ def getLastEventmui():
             print('socketId is null')
             return '0'
     except Exception:
-        print('deu exeção')
         print('buscando uuid do socket id')
         requestedUuid = getUuidFromSocket(socketid)
-    return '10'
+        if requestedUuid is None:
+            return '0'
+        print('uuid encontado = ', requestedUuid)
+
+    #return '10'
 
 
     dados = interscityManager.getLastDataByUUID(requestedUuid)
@@ -179,6 +182,9 @@ def getLastEventmui():
     except AttributeError:
         print('nao tem alerta')
 
+    dailyconsume = interscityManager.getDataDaily(requestedUuid)
+    if(dailyconsume is None):
+        dailyconsume = 0
     datajson = {
         "event_type": dados.Event,
         "energy_ativa": round(dados.energy_ativa, 3),
@@ -187,7 +193,7 @@ def getLastEventmui():
         "alert_type": alerta,
         "specific_energy_ativa": specificConsume,
         #"timestamp": dados.
-        "total_energy_daily": round(interscityManager.getDataDaily(requestedUuid),5)
+        "total_energy_daily": round(dailyconsume,5)
     }
     print(datajson)
     return json.dumps(datajson)
@@ -201,6 +207,9 @@ def getLastEvent():
     print(args)
   
     requestedUuid = args['uuid']
+    if requestedUuid is None or requestedUuid is '':
+        print('nao  veio uuid, volta....')
+        return '0'
     dados = interscityManager.getLastDataByUUID(requestedUuid)
     
     specificConsume = 0
@@ -384,6 +393,7 @@ def getUuidFromSocket(socket):
         print('nada encontrado na lista para o socket' , socket)
         return None
     else:
+
         return accountLog
 
 #attdashboard2()

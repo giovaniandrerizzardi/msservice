@@ -9,13 +9,17 @@ def initialMapData():
     response = []
 
     for casa in uuids:
+        print ('casas ', casa.uuid)
+
+
+    for casa in uuids:
         print (casa.uuid)
         dados = interscityManager.getLastDataByUUID(casa.uuid)
         
-        print (dados)
         if dados is None:
             print('nao tem dados')
         else:
+            print (dados.alerta)
             datajson = {
                 "uuid":casa.uuid,
                 "event_type": dados.Event,
@@ -24,13 +28,13 @@ def initialMapData():
                 "phase_real_rms": round(float(dados.rmsPhase_real), 2),
                 "lat": float(casa.latitude),
                 "lon": float(casa.longitude),
-                "alert_info": "none"
+                "alert_info": dados.alerta
                 #"total_energy_daily": interscityManager.getDataDaily("9c0772b8-c809-4865-bec7-70dd2013bc37")
             }
         
             response.append(datajson)
-            break
-    print(response)
+            #break
+    #print(response)
     return response
     #requests.post("http://127.0.0.1:1880/initial", json=response)
 
