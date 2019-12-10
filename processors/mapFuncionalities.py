@@ -19,7 +19,11 @@ def initialMapData():
         if dados is None:
             print('nao tem dados')
         else:
-            print (dados.alerta)
+            try:
+                alerta = dados.alerta
+            except Exception :
+                alerta = 'none'
+            
             datajson = {
                 "uuid":casa.uuid,
                 "event_type": dados.Event,
@@ -28,7 +32,7 @@ def initialMapData():
                 "phase_real_rms": round(float(dados.rmsPhase_real), 2),
                 "lat": float(casa.latitude),
                 "lon": float(casa.longitude),
-                "alert_info": dados.alerta
+                "alert_info": alerta
                 #"total_energy_daily": interscityManager.getDataDaily("9c0772b8-c809-4865-bec7-70dd2013bc37")
             }
         
