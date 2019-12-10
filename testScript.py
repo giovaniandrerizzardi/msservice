@@ -4,14 +4,14 @@ import random
 import string
 from random import randrange
 from processors import decoder, alertChecker
+import time
+import multiprocessing as mp
 
 from processors import interscityManager
 async def count():
-    a =1
-    while a<10:
-        
-        print("One")
-        await asyncio.sleep(1)
+  
+    print("One")
+    await asyncio.sleep(1)
     print("Two")
 
 LATINI = -28.26278
@@ -54,9 +54,25 @@ async def generateValues():
         print(form.latitude)
         print(form.longitude)
         #uuid = interscityManager.cadastraRecurso(form, 1)
-        uuid = 'c62824b8-8500-415a-87c8-b4b4906422e5'
+        uuid = 'cf7ab1dd-dfc2-400b-b772-d3c3fa4140da'
         print(uuid)
         uuidlist.append(uuid)
+
+    uuidlist.append('407da65d-712a-4a8a-b3ca-6eb8e8881374')
+    uuidlist.append('d750d04e-b64f-4a56-9b02-6437f795cd84')
+    uuidlist.append('8a571135-9010-4f56-b930-59587de8167a')
+    uuidlist.append('c62824b8-8500-415a-87c8-b4b4906422e5')
+
+    pool = mp.Pool()
+    pool.map(randomGenerate, uuidlist)
+    pool.close()
+    print('fechamos ')
+    return 0
+    for uuid in uuidlist:
+        print("processando uuid: ", uuid)
+        
+        randomGenerate(uuid)
+
 
     while a < 10:
         selectedUuid = random.choice(uuidlist)
@@ -81,16 +97,73 @@ async def generateValues():
         dados.alerta = alertChecker.checkForAlert(dados)
         a += 1
         interscityManager.sendInfoToInterSCity(dados)
+        await asyncio.sleep(60)
     #buscar os valores e jogar no interscity
     
 
+def randomGenerate(uuid):
+    print("processando uuid: ", uuid)
+    a=0
+    lastEnergyativa = 0
+    while a < 10:
+        
+        eventCChoice = randrange(1)
+        print('EVEnTO = ', eventCChoice)
+        dados = {}
+        if a == 0:
+            dados = decoder.processData_decode("EV_263", uuid)
+            dados.energy_ativa = 0.00510000000 #inicia com 0.005 kwh
+            lastEnergyativa = dados.energy_ativa
+        elif eventCChoice == 0:
+            dados = decoder.processData_decode("EV_275", uuid)
+        elif eventCChoice == 1:
+            dados = decoder.processData_decode("EV_276", uuid)
+
+        porcentagemAumentoconsumo = randrange(20)
+        porcentagemAumentocorrente = randrange(10)
+        porcentagemAumentotensao = randrange(10)
+        print(dados.energy_ativa)
+        dados.energy_ativa = lastEnergyativa #recebe o ultimo consumo e adiciona mais  a porcentagem que vai de 0 a 20 %
+
+        dados.energy_ativa = (
+            dados.energy_ativa + (dados.energy_ativa * porcentagemAumentoconsumo / 100))
+        dados.rmsVoltage_real = (
+            dados.rmsVoltage_real + (dados.rmsVoltage_real * porcentagemAumentocorrente / 100))
+        dados.rmsPhase_real = (
+            dados.rmsPhase_real + (dados.rmsPhase_real * porcentagemAumentotensao / 100))
+        dados.alerta = alertChecker.checkForAlert(dados)
+        a += 1
+        interscityManager.sendInfoToInterSCity(dados)
+        print('terminei de postar o evento ')
+        time.sleep(1)   #dorme por 20 segundos
+    #buscar os valores e jogar no interscity
+
+
+def basic_func(x):
+    if x == 0:
+        return 'zero'
+    elif x % 2 == 0:
+        return 'even'
+    else:
+        return 'odd'
+
+
+def multiprocessing_func(x):
+    print('asd ', x)
+    y = x*x
+    time.sleep(2)
+    print('{} squared results in a/an {} number'.format(x, basic_func(y)))
+
+
+
+    
 
 
 async def main():
-    #await asyncio.gather(generateValues())
-    dados = interscityManager.getDataByUUID('c62824b8-8500-415a-87c8-b4b4906422e5')
-
-    print(str(dados.text))
+    await asyncio.gather(generateValues())
+    #dados = interscityManager.getDataByUUID('c62824b8-8500-415a-87c8-b4b4906422e5')
+   
+    #print(str(dados.text))
 if __name__ == "__main__":
     s = time.perf_counter()
     #para o windos, descomenta a linha abaixp e comenta as outras 2
