@@ -2,8 +2,9 @@ import asyncio
 import time
 import random
 import string
+import requests
 from random import randrange
-from processors import decoder, alertChecker
+from processors import decoder, alertChecker, model
 import time
 import multiprocessing as mp
 
@@ -25,7 +26,7 @@ class Expando(object):
 async def generateValues():
     a = 1
     uuidlist = []
-    while a < 2:
+    while a < 1:
 
         a+=1
         letters = string.ascii_lowercase
@@ -54,27 +55,38 @@ async def generateValues():
         print(form.latitude)
         print(form.longitude)
         #uuid = interscityManager.cadastraRecurso(form, 1)
-        uuid = 'cf7ab1dd-dfc2-400b-b772-d3c3fa4140da'
-        print(uuid)
-        uuidlist.append(uuid)
+        #uuid = 'cf7ab1dd-dfc2-400b-b772-d3c3fa4140da'
+        #print(uuid)
+        #uuidlist.append(uuid)
+    uuids = model.casa_info.select()
 
-    uuidlist.append('407da65d-712a-4a8a-b3ca-6eb8e8881374')
-    uuidlist.append('d750d04e-b64f-4a56-9b02-6437f795cd84')
-    uuidlist.append('8a571135-9010-4f56-b930-59587de8167a')
-    uuidlist.append('c62824b8-8500-415a-87c8-b4b4906422e5')
+    response = []
 
-    pool = mp.Pool()
-    pool.map(randomGenerate, uuidlist)
-    pool.close()
+    for casa in uuids:
+        #print ('casas ', casa.uuid)
+        a = requests.get('http://localhost:8000/catalog/resources/'+ casa.uuid)
+        if a.status_code == 200:
+            print('achei o uuid no interscity : ', casa.uuid)
+            uuidlist.append(casa.uuid)
+
+    print(uuidlist)
+    #uuidlist.append('407da65d-712a-4a8a-b3ca-6eb8e8881374')
+    #uuidlist.append('d750d04e-b64f-4a56-9b02-6437f795cd84')
+    #uuidlist.append('8a571135-9010-4f56-b930-59587de8167a')
+    #uuidlist.append('c62824b8-8500-415a-87c8-b4b4906422e5')
+    
+    #pool = mp.Pool()
+    #pool.map(randomGenerate, uuidlist)
+    #pool.close()
     print('fechamos ')
-    return 0
+    #return 0
     for uuid in uuidlist:
         print("processando uuid: ", uuid)
         
         randomGenerate(uuid)
 
 
-    while a < 10:
+    while a < 2:
         selectedUuid = random.choice(uuidlist)
         eventCChoice = randrange(2)
         print('selected uuid = ', selectedUuid)
