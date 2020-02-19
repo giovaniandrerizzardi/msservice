@@ -86,7 +86,7 @@ async def generateValues():
         randomGenerate(uuid)
 
 
-    while a < 2:
+    while a < 10:
         selectedUuid = random.choice(uuidlist)
         eventCChoice = randrange(2)
         print('selected uuid = ', selectedUuid)
@@ -130,20 +130,22 @@ def randomGenerate(uuid):
             dados = decoder.processData_decode("EV_275", uuid)
         elif eventCChoice == 1:
             dados = decoder.processData_decode("EV_276", uuid)
-
+        dados.rmsVoltage_real = 220
         porcentagemAumentoconsumo = randrange(20)
         porcentagemAumentocorrente = randrange(10)
         porcentagemAumentotensao = randrange(10)
         print(dados.energy_ativa)
         dados.energy_ativa = lastEnergyativa #recebe o ultimo consumo e adiciona mais  a porcentagem que vai de 0 a 20 %
-
+        print('voltagem antes:',dados.rmsVoltage_real )
         dados.energy_ativa = (
             dados.energy_ativa + (dados.energy_ativa * porcentagemAumentoconsumo / 100))
         dados.rmsVoltage_real = (
             dados.rmsVoltage_real + (dados.rmsVoltage_real * porcentagemAumentocorrente / 100))
         dados.rmsPhase_real = (
             dados.rmsPhase_real + (dados.rmsPhase_real * porcentagemAumentotensao / 100))
+        print('voltagem depois:',dados.rmsVoltage_real )
         dados.alerta = alertChecker.checkForAlert(dados)
+        print('alertinha:',  dados.alerta)
         a += 1
         interscityManager.sendInfoToInterSCity(dados)
         print('terminei de postar o evento ')

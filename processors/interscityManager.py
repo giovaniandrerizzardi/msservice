@@ -24,7 +24,7 @@ def sendInfoToInterSCity(dados):
         lastEvent = model.last_event.select().where(model.last_event.uuid == dados.uuid).order_by(model.last_event.id_evento.desc()).get()
         print('o ultimo evento foi : ', lastEvent)
         newEventId = lastEvent.id_evento + 1
-        consumoEvento = round(float(dados.energy_ativa) - lastEvent.total_consume, 5)
+        consumoEvento = round(float(dados.energy_ativa) - abs(lastEvent.total_consume), 5)
         dados.specific_energy_ativa = consumoEvento
     except model.last_event.DoesNotExist:
         print("DATA NOT FOUND")
@@ -104,7 +104,7 @@ def getDataDaily(uuid):
     data = json.loads(r.text, object_hook=lambda d: namedtuple('X', d.keys())(*d.values()))
     if data.resources == []:
         print ("Nenhum evento neste periodo.")
-        return
+        return 0
     infoConsumoList = data.resources[0].capabilities.infoConsumo
     totalDailyEnergy = 0
    

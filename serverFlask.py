@@ -95,43 +95,77 @@ def attInitialMap():
     #print(mapFuncionalities.initialMapData())
     datajson = [
                     {
-                        "uuid": "432f.4234h.423fj4.555f",
+                        "uuid": "9c0772b8-c809-4865-bec7-70dd2013bc37",
                         "event_type": "EVENT_UP",
-                        "energy_ativa": "0.9kWh",
-                        "voltage_real_rms": "220V",
-                        "phase_real_rms": "0.25A",
-                        "lat": -28.26278,
+                        "energy_ativa": 0.00597,
+                        "voltage_real_rms": 237.6,
+                        "phase_real_rms": 0.54,
+                        "lat": -28.27278,
                         "lon": -52.40667,
+                        "alert_info": "SOBRETENSÃO"
+                    },
+                    {
+                        "uuid": "7f5ee617-1d26-44b6-bbf6-1e10f29d4e0a",
+                        "event_type": "EVENT_UP",
+                        "energy_ativa": 0.0053,
+                        "voltage_real_rms": 231.0,
+                        "phase_real_rms": 0.51,
+                        "lat": -28.26278,
+                        "lon": -52.45667,
                         "alert_info": "none"
                     },
                     {
-                        "uuid": "4324.423423.32423.423.44",
-                        "event_type": "EVENT_DOWN",
-                        "energy_ativa": "123",
-                        "voltage_real_rms": "432",
-                        "phase_real_rms": "123",
-                        "lat": -28.27278,
-                        "lon": -52.40667,
-                        "alert_info": "Sobretensão"
+                        "uuid": "dc5208b6-e18b-456e-8f5d-f6f134c4f5a2",
+                        "event_type": "EVENT_UP",
+                        "energy_ativa": 0.00561,
+                        "voltage_real_rms": 224.4,
+                        "phase_real_rms": 0.53,
+                        "lat": -28.270139999999998,
+                        "lon": -52.42856,
+                        "alert_info": "none"
+                    },
+                    {
+                        "uuid": "6bd8802f-0761-4451-80ab-2b1cee9bd5b0",
+                        "event_type": "EVENT_UP",
+                        "energy_ativa": 0.00556,
+                        "voltage_real_rms": 231.0,
+                        "phase_real_rms": 0.51,
+                        "lat": -28.28977,
+                        "lon": -52.427099999999996,
+                        "alert_info": "none"
                     }
                 ]
-
+    #return json.dumps(datajson)
     return json.dumps(mapFuncionalities.initialMapData())
 
 @app.route('/dashboard1', methods=['GET'])
 def attdashboard():
-    sec71 = round(isoFunctionalities.func71(''),5)
-    sec72 = isoFunctionalities.func72('passo fundo')
-    sec73 = isoFunctionalities.func73()
-    sec75 = round(isoFunctionalities.func75(),5)
-    sec76 = isoFunctionalities.func76()
-    sec77 = isoFunctionalities.func77('')
+    #sec71 = round(isoFunctionalities.func71(''),5)
+    #sec72 = isoFunctionalities.func72('passo fundo')
+    #sec73 = isoFunctionalities.func73()
+    #sec75 = round(isoFunctionalities.func75(),5)
+    #sec76 = isoFunctionalities.func76()
+    #sec77 = isoFunctionalities.func77('')
+    sec71 = 0
+    sec72 = 0
+    sec73 = 0
+    sec75 = 0
+    sec76 = 0
+    sec77 = 0
     print('seção 71 = ', sec71)
     print('seção 72 = ',sec72)
     print('seção 73 = ',sec73)
     print('seção 75 = ',sec75)
     print('seção 76 = ',sec76)
     print('seção 77 = ',sec77)
+    response2 = {
+        "s71": 0.32393,
+        "s72": 0.5835,
+        "s73": 35.88778200000029,
+        "s75": 0.0004,
+        "s76": 24,
+        "s77": "1:19:28.750000"
+    }
     response = {
         "s71" : sec71,
         "s72" : sec72,
@@ -141,7 +175,7 @@ def attdashboard():
         "s77" : str(sec77)
     }
     
-    return response
+    return response2
 
 
 
@@ -230,9 +264,9 @@ def getLastEvent():
         "voltage_real_rms": round(dados.rmsVoltage_real,2),
         "phase_real_rms": round(dados.rmsPhase_real,2),
         "alert_type": alerta,
-        "specific_energy_ativa": specificConsume
+        "specific_energy_ativa": specificConsume,
         #"timestamp": dados.
-        #"total_energy_daily": round(interscityManager.getDataDaily(requestedUuid),5)
+        "total_energy_daily": round(interscityManager.getDataDaily(requestedUuid),5)
     }
     print(datajson)
     return json.dumps(datajson)
@@ -296,11 +330,13 @@ def generateConsumoType(dados):
     series = []
     for s in dados:
         specificConsume = 0
-        try:
-            specificConsume = s.specific_energy_ativa
-        except AttributeError:
-            specificConsume = s.energy_ativa
-
+        specificConsume = s.energy_ativa
+        
+        #try:
+        #    specificConsume = s.specific_energy_ativa
+        #except AttributeError:
+        #    specificConsume = s.energy_ativa
+        
         data.append(round(specificConsume,5))
         labels.append(s.date)
     series.append('Consumo')

@@ -6,4 +6,4 @@ INTERSCITY_MAIN_URL = 'http://localhost:8000'
 
 #porcentagens de  calculos para alertas
 PORCENTAGEM_TENSAO = 5
-PORCENTAGEM_CORRENTE = 5
+PORCENTAGEM_CORRENTE = 90
